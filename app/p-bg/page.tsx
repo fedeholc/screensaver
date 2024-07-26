@@ -39,6 +39,15 @@ export default function Home() {
     <main
       style={{ backgroundImage: `${currentImage}` }}
       className={styles.main}
+      onClick={() => {
+        if (isPlaying) {
+          setIsPlaying(false);
+          if (document && document.fullscreenElement) {
+            document.exitFullscreen();
+          }
+        } else {
+        }
+      }}
     >
       <div
         style={{
@@ -49,20 +58,23 @@ export default function Home() {
           height: "100%",
         }}
       >
-        <div>
-          <FullScreenButton />
-          <button
-            onClick={() => {
-              if (isPlaying) {
-                setIsPlaying(false);
-              } else {
-                setIsPlaying(true);
-              }
-            }}
-          >
-            {!isPlaying ? "Play" : "Stop"}
-          </button>
-        </div>
+        {!isPlaying && (
+          <div>
+            <FullScreenButton />
+            <button
+              onClick={() => {
+                if (isPlaying) {
+                  setIsPlaying(false);
+                } else {
+                  setIsPlaying(true);
+                  document.documentElement.requestFullscreen();
+                }
+              }}
+            >
+              {!isPlaying ? "Play" : "Stop"}
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );
