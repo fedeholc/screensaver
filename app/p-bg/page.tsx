@@ -30,6 +30,7 @@ export default function Home() {
   // Preload next 3 images
   useEffect(() => {
     const preloadImages = () => {
+      //todo: ojo, está volviendo a cargar imagenes que ya están cargadas luego de la primera pasada
       for (let i = 1; i <= 3; i++) {
         const nextIndex = (currentImageIndex + i) % images.length;
         const img = new Image();
@@ -38,7 +39,7 @@ export default function Home() {
     };
     preloadImages();
   }, [currentImageIndex, images]);
-  
+
   return (
     <main
       style={{ backgroundImage: `${currentImage}` }}
@@ -46,10 +47,11 @@ export default function Home() {
       onClick={() => {
         if (isPlaying) {
           setIsPlaying(false);
-          if (document && document.fullscreenElement) {
+          /* if (document && document.fullscreenElement) {
             document.exitFullscreen();
-          }
+          } */
         } else {
+          setIsPlaying(true);
         }
       }}
     >
@@ -62,9 +64,9 @@ export default function Home() {
           height: "100%",
         }}
       >
-        {!false && (
+        {!isPlaying && (
           <div>
-            <FullScreenButton />
+            {/*  <FullScreenButton /> */}
             <button
               onClick={() => {
                 if (isPlaying) {
