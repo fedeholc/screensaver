@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <FullScreenButton />
-      <img alt="fondo" src="/a.jpg" />
+      <img alt="fondo" src="/b.jpg" />
     </main>
   );
 }
