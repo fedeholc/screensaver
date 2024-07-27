@@ -2,7 +2,7 @@
 "use client";
 import styles from "./page.module.css";
 import FullScreenButton from "../fullScreenButton";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import imageLinks from "./images.json";
 export default function Home() {
@@ -13,23 +13,32 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const intervalId = useRef<NodeJS.Timeout | undefined>();
+
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (!isPlaying) {
-        clearInterval(intervalId);
-        return;
-      }
-       console.log("x");
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000);
-    console.log("holi");
-    return () => clearInterval(intervalId);
+    if (isPlaying) {
+      intervalId.current = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      }, 5000);
+    }
+    return () => clearInterval(intervalId.current);
   }, [images.length, isPlaying]);
 
   const currentImage = images[currentImageIndex];
 
   //también podría usar useref?
-
+  // Preload next 3 images
+  useEffect(() => {
+    const preloadImages = () => {
+      for (let i = 1; i <= 3; i++) {
+        const nextIndex = (currentImageIndex + i) % images.length;
+        const img = new Image();
+        img.src = images[nextIndex].replace("url(", "").replace(")", "");
+      }
+    };
+    preloadImages();
+  }, [currentImageIndex, images]);
+  
   return (
     <main
       style={{ backgroundImage: `${currentImage}` }}
