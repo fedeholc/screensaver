@@ -4,9 +4,9 @@
   height: 100vh;
   overflow: hidden;
   /*   background-image: url("../../public/a.jpg");*/
-
   background-size: contain;
   background-repeat: no-repeat;
   background-color: black;
   background-position: center;
+  transition: all 3s ease-in-out;
 }

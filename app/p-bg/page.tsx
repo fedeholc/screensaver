@@ -2,32 +2,27 @@
 "use client";
 import styles from "./page.module.css";
 import FullScreenButton from "../fullScreenButton";
-import img1 from "../../public/c.jpg";
 import { useState } from "react";
 import { useEffect } from "react";
-
+import imageLinks from "./images.json";
 export default function Home() {
-  //let bg = { backgroundImage: `url(${img1.src})` };
-
-  const images = [
-    `url(${img1.src})`,
-    'url("/b.jpg")',
-    `url('https://content.magnumphotos.com/wp-content/uploads/2016/04/cortex/par115311-overlay.jpg')`,
-    // Agrega más URLs de imágenes según sea necesario
-  ];
+  const images = imageLinks.map((link) => {
+    return `url(${link})`;
+  });
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  let bg = {
-    backgroundImage: `url('https://content.magnumphotos.com/wp-content/uploads/2016/04/cortex/par115311-overlay.jpg')`,
-  };
-
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (!isPlaying) return;
+      if (!isPlaying) {
+        clearInterval(intervalId);
+        return;
+      }
+       console.log("x");
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 2000);
+    }, 5000);
+    console.log("holi");
     return () => clearInterval(intervalId);
   }, [images.length, isPlaying]);
 
@@ -58,7 +53,7 @@ export default function Home() {
           height: "100%",
         }}
       >
-        {!isPlaying && (
+        {!false && (
           <div>
             <FullScreenButton />
             <button
