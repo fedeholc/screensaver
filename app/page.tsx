@@ -99,6 +99,7 @@ export default function Home() {
   //TODO: acá probé con el componente que pasa las imagenes como hermano de los controles pero mandandolo al fondo con posición absoluta y zindex. Tendría que probar si es mejor como componente padre que contenga a los controles.
   //VER Creo que para evitar re-renders es mejor así
 
+  //TODO: ver si los botones de pause y stop quedan  dentro del slideswrapper o fuera. Lo que hay que probar es que al mover el mouse se hagan visibles por un cierto tiempo y sino se vuelven a ocultar
   return (
     <main className={`${styles.main}  `}>
       <div
