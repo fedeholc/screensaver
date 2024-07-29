@@ -1,0 +1,21 @@
+:root {
+
+  /* Z-indexes for components */
+  --ZI_albumsContainer_stopped: 4;
+  --ZI_SlidesWrapper: 3;
+  --ZI_Slides: 2;
+  --ZI_albumsContainer_playing: 1;
+
+  font-size: 16px;
+
+}
+
+body {
+
+  background-color: var(--background);
+  overflow: hidden;
+}
+
+.hidden {
+  display: none;
+}

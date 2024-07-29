@@ -9,11 +9,13 @@
 
 }
 
-.mainContainer {
-  z-index: 6
+.albumsContainer {
+  display: flex;
+  flex-direction: row;
+  z-index: var(--ZI_albumsContainer_stopped)
 }
 
-.listContainer {
+.albumsList {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -21,34 +23,32 @@
   max-height: 400px;
   border: 1px solid white;
 
-  .listItem {
+  .albumsItem {
     border: 1px solid red;
   }
-
 }
 
-.controller {
+.albumsContainer.playing {
+  z-index: var(--ZI_albumsContainer_playing);
+}
+
+.slidesWrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  /*   background-image: url("../../public/a.jpg");*/
-  /*   background-size: contain;
-  background-repeat: no-repeat; */
-  background-color: red;
-  /*   background-position: center;
- */
-  /* transition: all 1s ease-in-out; */
   position: absolute;
   width: 100%;
-  opacity: 0;
-  z-index: 4;
+  z-index: var(--ZI_SlidesWrapper);
+  color: white;
+  background: none;
+
+  .playerControls {
+    z-index: inherit;
+    width: fit-content;
+  }
 }
 
-.controller.playing {
+.slidesWrapper.playing {
   cursor: pointer;
-}
-
-.mainContainer.playing {
-  z-index: 1;
 }

@@ -3,7 +3,9 @@
 import styles from "./page.module.css";
 import FullScreenButton from "./fullScreenButton";
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
-import Prueba1 from "./prueba1/prueba1";
+import Slides from "./prueba1/slides";
+
+//TODO: probar cascade layers en lugar de z-index
 
 type AlbumType = {
   id: number;
@@ -66,9 +68,9 @@ export default function Home() {
   ];
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-  const [play, setPlay] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const [playList, setPlayList]: [
+  const [playlist, setPlayList]: [
     { id: number; name: string }[],
     Dispatch<SetStateAction<{ id: number; name: string }[]>>
   ] = useState<{ id: number; name: string }[]>([]);
@@ -79,7 +81,6 @@ export default function Home() {
       photographer.name.toLowerCase().includes(search.toLowerCase())
     );
     setFilteredAlbums(filtered);
-    console.log(filteredAlbums);
   }
 
   function handleAdd(
@@ -92,45 +93,62 @@ export default function Home() {
   }
 
   function handlePlay() {
-    console.log("p", play);
-    setPlay(!play);
+    setIsPlaying(!isPlaying);
   }
 
   //TODO: acá probé con el componente que pasa las imagenes como hermano de los controles pero mandandolo al fondo con posición absoluta y zindex. Tendría que probar si es mejor como componente padre que contenga a los controles.
+  //VER Creo que para evitar re-renders es mejor así
 
   return (
     <main className={`${styles.main}  `}>
-      <Prueba1 play={play}></Prueba1>
       <div
-        className={`${styles.controller} ${play ? styles.playing : ""}`}
-        onClick={handlePlay}
+        className={`${styles.slidesWrapper} ${isPlaying ? styles.playing : ""}`}
+        onClick={(e) => {
+          console.log(e);
+          const target = e.target as HTMLElement;
+          if (target.id === "buttonPause") {
+            console.log("pausar");
+            return;
+          }
+          handlePlay;
+        }}
       >
-        controller
+        <Slides play={isPlaying}></Slides>
+        Slides Wrapper
+        <button id="buttonPause" className={`${styles.playerControls}`}>
+          pausar
+        </button>
+        <button>stop</button>
       </div>
-      <div className={`${styles.mainContainer} ${play ? styles.playing : ""}`}>
-        {play ? "Playing" : "Paused"}
-        <button onClick={handlePlay}>Playaaaaa</button>
-        <h2>Main</h2>
-        <input type="text" placeholder="Search" onChange={handleSearch} />
-        <div className={styles.listContainer}>
-          {filteredAlbums.map((album) => (
-            <div className={styles.listItem} key={album.id}>
-              {album.name}{" "}
-              <button onClick={(e) => handleAdd(e, album)}>Add</button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={`${styles.mainContainer} ${play ? styles.playing : ""}`}>
-        <h2>playlist</h2>
-        <div className={styles.listContainer}>
-          {playList &&
-            playList.map((album: AlbumType) => (
-              <div className={styles.listItem} key={album.id}>
-                {album.name} <button>remove</button>
+      <div
+        className={`${styles.albumsContainer} ${
+          isPlaying ? styles.playing : ""
+        }`}
+      >
+        <div>
+          {isPlaying ? "Playing" : "Paused"}
+          <button onClick={handlePlay}>Playaaaaa</button>
+          <h2>albums</h2>
+          <input type="text" placeholder="Search" onChange={handleSearch} />
+          <div className={styles.albumsList}>
+            {filteredAlbums.map((album) => (
+              <div className={styles.albumsItem} key={album.id}>
+                {album.name}{" "}
+                <button onClick={(e) => handleAdd(e, album)}>Add</button>
               </div>
             ))}
+          </div>
+        </div>
+        <div>
+          <h2>playlist</h2>
+          <div className={styles.albumsList}>
+            {playlist &&
+              playlist.map((album: AlbumType) => (
+                <div className={styles.albumsItem} key={album.id}>
+                  {album.name} <button>remove</button>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </main>

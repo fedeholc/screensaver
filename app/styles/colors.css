@@ -1,0 +1,52 @@
+:root {
+  --background: black;
+  --labelFont: var(--color14);
+  --inputFont: var(--color16);
+  --inputBG: var(--color2);
+  --inputBorder: var(--color7);
+  --inputFocusBorder: var(--color14);
+
+  --button: var(--color20);
+  --buttonBG: var(--color1);
+  --buttonShadow: var(--color3);
+
+  --divider: var(--color3);
+
+  --drop: var(--color18);
+  --dropHover: var(--color20);
+
+  --imageBorder: var(--midGray20);
+
+  --disabledGray: var(--midgray80);
+
+  --midgray80: rgba(128, 128, 128, 0.8);
+  --midGray20: rgba(128, 128, 128, 0.2);
+
+  --color1: #1f2335;
+  --color1b: hsl(229, 20%, 16%);
+  --color2: #24283b;
+  --color3: #292e42;
+  --color4: #3b4261;
+  --color5: #414868;
+  --color6: #545c7e;
+  --color7: #565f89;
+  --color8: #737aa2;
+  --color9: #a9b1d6;
+  --color10: #c0caf5;
+  --color11: #394b70;
+  --color12: #3d59a1;
+  --color13: #7aa2f7;
+  --color14: #7dcfff;
+  --color15: #b4f9f8;
+  --color16: #bb9af7;
+  --color17: #9d7cd8;
+  --color18: #ff9e64;
+  --color19: #ffc777;
+  --color20: #c3e88d;
+  --color21: #4fd6be;
+  --color22: #41a6b5;
+  --color23: #ff757f;
+  --color24: #c53b53;
+  --color25: #ffa9c2;
+  --color26: #FF9FEF;
+}

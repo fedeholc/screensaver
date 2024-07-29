@@ -72,25 +72,3 @@ select {
     scroll-behavior: auto !important;
   }
 }
-
-body {
-
-  background-color: black;
-  overflow: hidden;
-}
-
-
- .cat-img {
-   view-transition-name: meow-image;
- }
-
- 
-
- .hidden {
-   display: none;
- }
-
- 
- 
- 
-  

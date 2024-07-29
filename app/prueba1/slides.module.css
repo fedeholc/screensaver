@@ -1,9 +1,8 @@
-.main {
+.slides {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  /*   background-image: url("../../public/a.jpg");*/
   background-size: contain;
   background-repeat: no-repeat;
   background-color: black;
@@ -11,10 +10,5 @@
   transition: all 1s ease-in-out;
   position: absolute;
   width: 100%;
-  z-index: 2;
+  z-index: var(--ZI_Slides);
 }
-
-/* 
-.playing {
-  z-index: 1;
-} */
