@@ -10,6 +10,11 @@
   background-position: center;
   transition: all 1s ease-in-out;
   position: absolute;
-    width: 100%;
-    z-index: -1;
+  width: 100%;
+  z-index: 2;
 }
+
+/* 
+.playing {
+  z-index: 1;
+} */

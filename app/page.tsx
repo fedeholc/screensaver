@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
 import FullScreenButton from "./fullScreenButton";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import Prueba1 from "./prueba1/prueba1";
 
 type AlbumType = {
@@ -92,18 +92,22 @@ export default function Home() {
   }
 
   function handlePlay() {
-
-    console.log("p",play);
+    console.log("p", play);
     setPlay(!play);
   }
 
   //TODO: acá probé con el componente que pasa las imagenes como hermano de los controles pero mandandolo al fondo con posición absoluta y zindex. Tendría que probar si es mejor como componente padre que contenga a los controles.
-  
 
   return (
-    <main className={styles.main}>
+    <main className={`${styles.main}  `}>
       <Prueba1 play={play}></Prueba1>
-      <div>
+      <div
+        className={`${styles.controller} ${play ? styles.playing : ""}`}
+        onClick={handlePlay}
+      >
+        controller
+      </div>
+      <div className={`${styles.mainContainer} ${play ? styles.playing : ""}`}>
         {play ? "Playing" : "Paused"}
         <button onClick={handlePlay}>Playaaaaa</button>
         <h2>Main</h2>
@@ -117,7 +121,8 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div>
+
+      <div className={`${styles.mainContainer} ${play ? styles.playing : ""}`}>
         <h2>playlist</h2>
         <div className={styles.listContainer}>
           {playList &&

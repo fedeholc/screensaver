@@ -11,15 +11,27 @@ export default function Prueba1(props: { play: boolean }) {
     return `url(${link})`;
   });
 
+  const mainRef = useRef<HTMLDivElement>(null);
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(props.play);
 
-  //TODO: ojo, por algún motivo isplaying no toma el valor de props.play, revisar 
+  console.log("inicio, isplaying:", isPlaying, props.play);
 
+  //TODO: ojo, por algún motivo isplaying no toma el valor de props.play, revisar
 
   const intervalId = useRef<NodeJS.Timeout | undefined>();
 
   useEffect(() => {
+    setIsPlaying(props.play);
+
+    /*   if (props.play) {
+      mainRef.current?.classList.add(styles.playing);
+    }
+    else {
+      mainRef.current?.classList.remove(styles.playing);
+    } */
+
     console.log("holi", isPlaying, props.play);
     //if (isPlaying) {
     if (props.play) {
@@ -50,10 +62,13 @@ export default function Prueba1(props: { play: boolean }) {
   return (
     <main
       style={{ backgroundImage: `${currentImage}` }}
-      className={styles.main}
+      /* ref={mainRef}  */
+      className={`${styles.main} ${isPlaying ? styles.playing : ""}`}
       onClick={() => {
+        console.log("hola main");
         if (isPlaying) {
           setIsPlaying(false);
+          console.log("hola falso");
           /* if (document && document.fullscreenElement) {
             document.exitFullscreen();
           } */
