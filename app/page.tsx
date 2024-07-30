@@ -92,6 +92,7 @@ export default function Home() {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [mouseOver, setMouseOver] = useState(false);
 
   const [playlist, setPlayList]: [
     { id: number; name: string }[],
@@ -119,8 +120,6 @@ export default function Home() {
     setIsPlaying(!isPlaying);
   }
 
-  //TODO: ver si los botones de pause y stop quedan  dentro del slideswrapper o fuera. Lo que hay que probar es que al mover el mouse se hagan visibles por un cierto tiempo y sino se vuelven a ocultar
-
   function handleMouseMove() {
     if (isPlaying && !showPlayer) {
       setShowPlayer(true);
@@ -131,26 +130,71 @@ export default function Home() {
     }
 
     timeoutRef.current = setTimeout(() => {
-      setShowPlayer(false);
+      if (!mouseOver) {
+        setShowPlayer(false);
+      }
     }, 1000);
   }
 
+  function PlayerControls() {
+    function handleMouseOver() {
+      setMouseOver(true);
+    }
+    function handleMouseOut() {
+      setMouseOver(false);
+    }
+    return (
+      <div className={`${styles.playerContainer}`}>
+        {isPaused && (
+          <button
+            id="buttonPlay"
+            className={`${styles.playerControl}`}
+            onClick={() => {
+              setIsPaused(false);
+              setIsPlaying(true);
+            }}
+            onMouseOverCapture={handleMouseOver}
+            onMouseOutCapture={handleMouseOut}
+          >
+            Play
+          </button>
+        )}
+
+        {!isPaused && (
+          <button
+            id="buttonPause"
+            className={`${styles.playerControl}`}
+            onClick={() => {
+              setIsPaused(true);
+              setIsPlaying(true);
+            }}
+            onMouseOverCapture={handleMouseOver}
+            onMouseOutCapture={handleMouseOut}
+          >
+            {PauseIcon}
+          </button>
+        )}
+        <button
+          id="buttonStop"
+          className={`${styles.playerControl}`}
+          onClick={() => {
+            setIsPaused(false);
+            setIsPlaying(false);
+          }}
+          onMouseOverCapture={handleMouseOver}
+          onMouseOutCapture={handleMouseOut}
+        >
+          STOP
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <main className={`${styles.main}  `}>
+    <main className={`${styles.main}`}>
       <div
-        className={`${styles.slidesWrapper} ${isPlaying ? styles.playing : ""}`}
-        onClick={(e) => {
-          /*     console.log(e);
-          const target = e.target as HTMLElement;
-          console.log(target);
-          if (target.id === "buttonPause") {
-            setIsPaused(true);
-            console.log("pausado");
-            return;
-          }
-          handlePlay; */
-        }}
         onMouseMove={handleMouseMove}
+        className={`${styles.slidesWrapper} ${isPlaying ? styles.playing : ""}`}
       >
         <Slides
           play={isPlaying}
@@ -163,53 +207,20 @@ export default function Home() {
           }
         ></Slides>
         Slides Wrapper
-        <div
-          className={`${styles.playerContainer} ${
-            showPlayer ? styles.visible : styles.hidden
-          }`}
-          /*    onMouseOver={handleMouseMove} */
-        >
-          <button
-            id="buttonPlay"
-            className={`${styles.playerControl}
-            `}
-            onClick={() => {
-              setIsPaused(false);
-              setIsPlaying(true);
-            }}
-          >
-            Play
-          </button>
-          <button
-            id="buttonPause"
-            className={`${styles.playerControl}`}
-            onClick={() => setIsPaused(true)}
-          >
-            {PauseIcon}
-          </button>
-          <button
-            id="buttonStop"
-            className={`${styles.playerControl}
-          `}
-          >
-            STOP
-          </button>
-        </div>
+        {showPlayer && <PlayerControls />}
       </div>
       <div
-        className={`${styles.albumsContainer} ${
-          isPlaying ? styles.playing : ""
-        }`}
+        className={`${styles.albumsContainer} 
+          ${isPlaying ? styles.playing : ""}`}
       >
         <div>
-          {isPlaying ? "Playing" : "Paused"}
           <button onClick={handlePlay}>Playaaaaa</button>
           <h2>albums</h2>
           <input type="text" placeholder="Search" onChange={handleSearch} />
           <div className={styles.albumsList}>
             {filteredAlbums.map((album) => (
               <div className={styles.albumsItem} key={album.id}>
-                {album.name}{" "}
+                {album.name}
                 <button onClick={(e) => handleAdd(e, album)}>Add</button>
               </div>
             ))}
