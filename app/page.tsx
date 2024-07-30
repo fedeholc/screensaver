@@ -13,6 +13,24 @@ type AlbumType = {
   // otros campos del álbum si existen
 };
 
+const PauseIcon = (
+  <svg
+    className={styles.icon}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    stroke="currentColor"
+    stroke-width="1"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
+  >
+    <rect x="14" y="4" width="4" height="16" rx="0" />
+    <rect x="6" y="4" width="4" height="16" rx="0" />
+  </svg>
+);
+
 export default function Home() {
   const albums: AlbumType[] = [
     { id: 1, name: "Ansel Adams" },
@@ -67,6 +85,9 @@ export default function Home() {
     { id: 50, name: "Zhang Huan" },
   ];
 
+  const [showPlayer, setShowPlayer] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -96,10 +117,21 @@ export default function Home() {
     setIsPlaying(!isPlaying);
   }
 
-  //TODO: acá probé con el componente que pasa las imagenes como hermano de los controles pero mandandolo al fondo con posición absoluta y zindex. Tendría que probar si es mejor como componente padre que contenga a los controles.
-  //VER Creo que para evitar re-renders es mejor así
-
   //TODO: ver si los botones de pause y stop quedan  dentro del slideswrapper o fuera. Lo que hay que probar es que al mover el mouse se hagan visibles por un cierto tiempo y sino se vuelven a ocultar
+
+  function handleMouseMove() {
+    if (isPlaying && !showPlayer) {
+      setShowPlayer(true);
+    }
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setShowPlayer(false);
+    }, 11000);
+  }
   return (
     <main className={`${styles.main}  `}>
       <div
@@ -113,13 +145,38 @@ export default function Home() {
           }
           handlePlay;
         }}
+        onMouseMove={handleMouseMove}
       >
         <Slides play={isPlaying}></Slides>
         Slides Wrapper
-        <button id="buttonPause" className={`${styles.playerControls}`}>
-          pausar
-        </button>
-        <button>stop</button>
+        <div
+          className={`${styles.playerContainer} ${
+            showPlayer ? styles.visible : styles.hidden
+          }`}
+          /*    onMouseOver={handleMouseMove} */
+        >
+          <button
+            id="buttonPlay"
+            className={`${styles.playerControl}
+            `}
+          >
+            Play
+          </button>
+          <button
+            id="buttonPause"
+            className={`${styles.playerControl}
+            `}
+          >
+            {PauseIcon}
+          </button>
+          <button
+            id="buttonStop"
+            className={`${styles.playerControl}
+          `}
+          >
+            STOP
+          </button>
+        </div>
       </div>
       <div
         className={`${styles.albumsContainer} ${
