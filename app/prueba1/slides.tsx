@@ -4,28 +4,38 @@ import styles from "./slides.module.css";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import imageLinks from "./images.json";
+import { SlidesAction } from "../types";
 
-export default function Slides(props: { play: boolean }) {
+export default function Slides({
+  play,
+  action,
+}: {
+  play: boolean;
+  action: SlidesAction;
+}) {
   const images = imageLinks.map((link) => {
     return `url(${link})`;
   });
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(props.play);
+  //  const [isPlaying, setIsPlaying] = useState(props.play);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const intervalId = useRef<NodeJS.Timeout | undefined>();
 
   useEffect(() => {
-    setIsPlaying(props.play);
+    if (action === SlidesAction.PLAY) {
+      setIsPlaying(true);
+    }
 
     //if (isPlaying) {
-    if (props.play) {
+    if (action === SlidesAction.PLAY) {
       intervalId.current = setInterval(() => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
       }, 5000);
     }
     return () => clearInterval(intervalId.current);
-  }, [images.length, isPlaying, props.play]);
+  }, [images.length, isPlaying, play, action]);
 
   const currentImage = images[currentImageIndex];
 

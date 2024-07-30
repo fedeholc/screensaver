@@ -55,7 +55,7 @@
 
   .playerContainer:hover {
     opacity: 100;
-    transition: all ease-in-out 0.2s;
+    transition: all ease-in-out 0.3s;
 
 
   }
@@ -70,10 +70,10 @@
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.8);
     border: 3px solid var(--color26);
-    transition: all ease-in-out 0.2s;
     padding: 1rem;
     box-shadow: 4px 4px 1px 0 rgb(10, 10, 10);
     height: 102px;
+    transition: all ease-in-out 0.3s;
   }
 
   .playerControl:hover {
@@ -82,8 +82,8 @@
     background-color: var(--color26);
     color: rgb(0, 0, 50);
     cursor: pointer;
-    transition: all ease-in-out 0.2s;
     box-shadow: 4px 4px 1px 0 rgb(10, 10, 10);
+    transition: all ease-in-out 0.3s;
   }
 
 }
@@ -94,12 +94,12 @@
 
 .hidden {
   opacity: 0;
-  transition: all ease-in-out 0.5s;
+  transition: all ease-in-out 0.3s;
 }
 
 .visible {
   opacity: 100;
-  transition: all ease-in-out 0.2s;
+  transition: all ease-in-out 0.3s;
 }
 
 .icon {

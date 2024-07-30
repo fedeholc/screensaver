@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import FullScreenButton from "./fullScreenButton";
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import Slides from "./prueba1/slides";
+import { SlidesAction } from "./types";
 
 //TODO: probar cascade layers en lugar de z-index
 
@@ -22,9 +23,9 @@ const PauseIcon = (
     viewBox="0 0 24 24"
     fill="currentColor"
     stroke="currentColor"
-    stroke-width="1"
-    stroke-linecap="square"
-    stroke-linejoin="miter"
+    strokeWidth="1"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
   >
     <rect x="14" y="4" width="4" height="16" rx="0" />
     <rect x="6" y="4" width="4" height="16" rx="0" />
@@ -90,6 +91,7 @@ export default function Home() {
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const [playlist, setPlayList]: [
     { id: number; name: string }[],
@@ -130,24 +132,36 @@ export default function Home() {
 
     timeoutRef.current = setTimeout(() => {
       setShowPlayer(false);
-    }, 11000);
+    }, 1000);
   }
+
   return (
     <main className={`${styles.main}  `}>
       <div
         className={`${styles.slidesWrapper} ${isPlaying ? styles.playing : ""}`}
         onClick={(e) => {
-          console.log(e);
+          /*     console.log(e);
           const target = e.target as HTMLElement;
+          console.log(target);
           if (target.id === "buttonPause") {
-            console.log("pausar");
+            setIsPaused(true);
+            console.log("pausado");
             return;
           }
-          handlePlay;
+          handlePlay; */
         }}
         onMouseMove={handleMouseMove}
       >
-        <Slides play={isPlaying}></Slides>
+        <Slides
+          play={isPlaying}
+          action={
+            isPaused
+              ? SlidesAction.PAUSE
+              : isPlaying
+              ? SlidesAction.PLAY
+              : SlidesAction.STOP
+          }
+        ></Slides>
         Slides Wrapper
         <div
           className={`${styles.playerContainer} ${
@@ -159,13 +173,17 @@ export default function Home() {
             id="buttonPlay"
             className={`${styles.playerControl}
             `}
+            onClick={() => {
+              setIsPaused(false);
+              setIsPlaying(true);
+            }}
           >
             Play
           </button>
           <button
             id="buttonPause"
-            className={`${styles.playerControl}
-            `}
+            className={`${styles.playerControl}`}
+            onClick={() => setIsPaused(true)}
           >
             {PauseIcon}
           </button>
