@@ -136,6 +136,7 @@ export default function Home() {
     }, 1000);
   }
 
+  
   function PlayerControls() {
     function handleMouseOver() {
       setMouseOver(true);
@@ -144,7 +145,11 @@ export default function Home() {
       setMouseOver(false);
     }
     return (
-      <div className={`${styles.playerContainer}`}>
+      <div
+        onMouseOverCapture={handleMouseOver}
+        onMouseOutCapture={handleMouseOut}
+        className={`${styles.playerContainer}`}
+      >
         {isPaused && (
           <button
             id="buttonPlay"
@@ -153,8 +158,8 @@ export default function Home() {
               setIsPaused(false);
               setIsPlaying(true);
             }}
-            onMouseOverCapture={handleMouseOver}
-            onMouseOutCapture={handleMouseOut}
+            /*  onMouseOverCapture={handleMouseOver}
+            onMouseOutCapture={handleMouseOut} */
           >
             Play
           </button>
@@ -167,9 +172,9 @@ export default function Home() {
             onClick={() => {
               setIsPaused(true);
               setIsPlaying(true);
-            }}
+            }} /* 
             onMouseOverCapture={handleMouseOver}
-            onMouseOutCapture={handleMouseOut}
+            onMouseOutCapture={handleMouseOut} */
           >
             {PauseIcon}
           </button>
@@ -180,9 +185,9 @@ export default function Home() {
           onClick={() => {
             setIsPaused(false);
             setIsPlaying(false);
-          }}
+          }} /* 
           onMouseOverCapture={handleMouseOver}
-          onMouseOutCapture={handleMouseOut}
+          onMouseOutCapture={handleMouseOut} */
         >
           STOP
         </button>
