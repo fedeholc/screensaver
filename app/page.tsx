@@ -5,7 +5,7 @@ import FullScreenButton from "./fullScreenButton";
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import Slides from "./prueba1/slides";
 import { SlidesAction } from "./types";
-
+import { PauseIcon, StopIcon, PlayIcon } from "./icons";
 //TODO: probar cascade layers en lugar de z-index
 
 type AlbumType = {
@@ -13,58 +13,6 @@ type AlbumType = {
   name: string;
   // otros campos del álbum si existen
 };
-
-const pauseIcon = (
-  <svg
-    className={styles.icon}
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    stroke="currentColor"
-    strokeWidth="1"
-    strokeLinecap="square"
-    strokeLinejoin="miter"
-  >
-    <rect x="14" y="4" width="4" height="16" rx="0" />
-    <rect x="6" y="4" width="4" height="16" rx="0" />
-  </svg>
-);
-
-const playIcon = (
-  <svg
-    className={styles.icon}
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="square"
-    strokeLinejoin="miter"
-  >
-    <polygon points="6 3 20 12 6 21 6 3" />
-  </svg>
-);
-
-const stopIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="square"
-    strokeLinejoin="miter"
-    className={styles.icon}
-  >
-    <rect width="16" height="16" x="4" y="4" rx="0" />
-  </svg>
-);
 
 export default function Home() {
   const albums: AlbumType[] = [
@@ -192,7 +140,7 @@ export default function Home() {
               setIsPlaying(true);
             }}
           >
-            {playIcon}
+            <PlayIcon className={styles.icon} />
           </button>
         )}
 
@@ -205,7 +153,7 @@ export default function Home() {
               setIsPlaying(true);
             }}
           >
-            {pauseIcon}
+            <PauseIcon className={styles.icon} />
           </button>
         )}
         <button
@@ -218,7 +166,7 @@ export default function Home() {
           onMouseOverCapture={handleMouseOver}
           onMouseOutCapture={handleMouseOut} */
         >
-          {stopIcon}
+          <StopIcon className={styles.icon} />
         </button>
       </div>
     );
