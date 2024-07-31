@@ -14,7 +14,7 @@ type AlbumType = {
   // otros campos del álbum si existen
 };
 
-const PauseIcon = (
+const pauseIcon = (
   <svg
     className={styles.icon}
     xmlns="http://www.w3.org/2000/svg"
@@ -29,6 +29,40 @@ const PauseIcon = (
   >
     <rect x="14" y="4" width="4" height="16" rx="0" />
     <rect x="6" y="4" width="4" height="16" rx="0" />
+  </svg>
+);
+
+const playIcon = (
+  <svg
+    className={styles.icon}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+  >
+    <polygon points="6 3 20 12 6 21 6 3" />
+  </svg>
+);
+
+const stopIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+    className={styles.icon}
+  >
+    <rect width="16" height="16" x="4" y="4" rx="0" />
   </svg>
 );
 
@@ -136,7 +170,6 @@ export default function Home() {
     }, 1000);
   }
 
-  
   function PlayerControls() {
     function handleMouseOver() {
       setMouseOver(true);
@@ -158,10 +191,8 @@ export default function Home() {
               setIsPaused(false);
               setIsPlaying(true);
             }}
-            /*  onMouseOverCapture={handleMouseOver}
-            onMouseOutCapture={handleMouseOut} */
           >
-            Play
+            {playIcon}
           </button>
         )}
 
@@ -172,11 +203,9 @@ export default function Home() {
             onClick={() => {
               setIsPaused(true);
               setIsPlaying(true);
-            }} /* 
-            onMouseOverCapture={handleMouseOver}
-            onMouseOutCapture={handleMouseOut} */
+            }}
           >
-            {PauseIcon}
+            {pauseIcon}
           </button>
         )}
         <button
@@ -189,7 +218,7 @@ export default function Home() {
           onMouseOverCapture={handleMouseOver}
           onMouseOutCapture={handleMouseOut} */
         >
-          STOP
+          {stopIcon}
         </button>
       </div>
     );
