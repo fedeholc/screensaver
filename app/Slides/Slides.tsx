@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import styles from "./slides.module.css";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useEffect } from "react";
-import imageLinks from "./images.json";
+import imageLinks from "./images2.json";
 import {
   play,
   stop,
@@ -14,13 +14,16 @@ import {
 } from "@/lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
-export default function Slides() {
+export default function Slides({
+  imageList,
+}: {
+  imageList: { albumId: number; link: string }[];
+}) {
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
 
-  const images = imageLinks.map((link) => {
-    return `url(${link})`;
-  });
+  //const images = useMemo(() => [...imageLinks], []);
+  const images = imageList;
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -42,21 +45,21 @@ export default function Slides() {
   //también podría usar useref?
   // Preload next 3 images
   useEffect(() => {
-    dispatch(setAlbumId(currentImageIndex));
+    dispatch(setAlbumId(currentImage.albumId));
     const preloadImages = () => {
-      //todo: ojo, está volviendo a cargar imagenes que ya están cargadas luego de la primera pasada
+      //TODO: ojo, está volviendo a cargar imagenes que ya están cargadas luego de la primera pasada
       for (let i = 1; i <= 3; i++) {
         const nextIndex = (currentImageIndex + i) % images.length;
         const img = new Image();
-        img.src = images[nextIndex].replace("url(", "").replace(")", "");
+        img.src = images[nextIndex].link;
       }
     };
     preloadImages();
-  }, [currentImageIndex, images, dispatch]);
+  }, [currentImageIndex, currentImage.albumId, images, dispatch]);
 
   return (
     <div
-      style={{ backgroundImage: `${currentImage}` }}
+      style={{ backgroundImage: `url(${currentImage.link})` }}
       className={`${styles.slides} ${
         status === "playing" || status === "paused" ? styles.playing : ""
       }`}

@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
 import FullScreenButton from "./fullScreenButton";
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, use, useRef, useState } from "react";
 import Slides from "./Slides/Slides";
 import { SlidesAction } from "./types";
 import { PauseIcon, StopIcon, PlayIcon } from "./PlayerControls/icons";
@@ -16,12 +16,17 @@ import {
 } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import PlayerControls from "./PlayerControls/PlayerControls";
+import album1 from "./Slides/images1.json";
+import album2 from "./Slides/images2.json";
+import album3 from "./Slides/images3.json";
+import { useEffect } from "react";
 
 //TODO: probar cascade layers en lugar de z-index
 
 type AlbumType = {
   id: number;
   name: string;
+  links?: string[];
   // otros campos del álbum si existen
 };
 
@@ -31,9 +36,13 @@ export default function Home() {
   const status = useAppSelector(selectStatus);
 
   const albums: AlbumType[] = [
-    { id: 1, name: "Ansel Adams" },
-    { id: 2, name: "Henri Cartier-Bresson" },
-    { id: 3, name: "Salvador Dalí" },
+    { id: 1, name: "Ansel Adams", links: album1 },
+    {
+      id: 2,
+      name: "Henri Cartier-Bresson",
+      links: album2,
+    },
+    { id: 3, name: "Salvador Dalí", links: album3 },
     { id: 4, name: "Man Ray" },
     { id: 5, name: "Dorothea Lange" },
     { id: 6, name: "Irving Penn" },
@@ -94,6 +103,14 @@ export default function Home() {
     Dispatch<SetStateAction<{ id: number; name: string }[]>>
   ] = useState<{ id: number; name: string }[]>([]);
 
+  const [imageList, setImageList] = useState<
+    { albumId: number; link: string }[]
+  >([]);
+
+  const [playerList, setPlayerList] = useState<
+    { albumId: number; link: string }[]
+  >([]);
+
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const search = event.target.value;
     let filtered = albums.filter((photographer) =>
@@ -102,12 +119,30 @@ export default function Home() {
     setFilteredAlbums(filtered);
   }
 
+ useEffect(() => {
+   if (imageList.length === 0) {
+    let temp = album1.map((link) => {
+      return { albumId: 1, link: link };
+    });
+    setPlayerList(temp);
+    console.log(temp);
+  } else {
+    setPlayerList(imageList);
+  }
+}, [imageList]);
+
   function handleAdd(
     event: React.MouseEvent<HTMLButtonElement>,
     album: AlbumType
   ) {
     console.log(event);
     console.log(album);
+    if (album && album.links) {
+      let temp = album.links.map((link) => {
+        return { albumId: album.id, link: link };
+      });
+      setImageList((prev) => [...prev, ...temp]);
+    }
     setPlayList((prev) => [...prev, album]);
   }
 
@@ -140,7 +175,8 @@ export default function Home() {
           status === "paused" || status === "playing" ? styles.playing : ""
         }`}
       >
-        <Slides></Slides>
+        {playerList.length > 0 && <Slides imageList={playerList}></Slides>}
+
         <div className={`${styles.playerControlsWrapper}`}>
           {/*           {showPlayer ? "showPlayer" : "no showPlayer"}
            */}{" "}
@@ -196,6 +232,17 @@ export default function Home() {
                 playlist.map((album: AlbumType) => (
                   <div className={styles.albumsItem} key={album.id}>
                     {album.name} <button>remove</button>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div>
+            <h2>Imagelist</h2>
+            <div className={styles.albumsList}>
+              {imageList &&
+                imageList.map((image) => (
+                  <div className={styles.albumsItem} key={image.link}>
+                    {image.link} <button>remove</button>
                   </div>
                 ))}
             </div>
