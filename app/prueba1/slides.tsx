@@ -50,7 +50,7 @@ export default function Slides({
     return () => clearInterval(intervalId.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     //TODO: por qué me pide incluirlo en el array de dependencias?
-  }, [images.length, isPlaying, play, action]);
+  }, [images.length, isPlaying, play, action,dispatch]);
 
   const currentImage = images[currentImageIndex];
 
