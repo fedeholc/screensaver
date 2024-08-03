@@ -83,12 +83,10 @@ export default function Home() {
     { id: 50, name: "Zhang Huan" },
   ];
 
-  const [showPlayer, setShowPlayer] = useState(false);
+  const [showPlayer, setShowPlayer] = useState(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-  //const [isPlaying, setIsPlaying] = useState(false);
-  //const [isPaused, setIsPaused] = useState(false);
   const [isMouseOver, setIsMouseOver] = useState(false);
 
   const [playlist, setPlayList]: [
@@ -113,11 +111,6 @@ export default function Home() {
     setPlayList((prev) => [...prev, album]);
   }
 
-  function handlePlay() {
-    //setIsPlaying(!isPlaying);
-    dispatch(play());
-  }
-
   function handleMouseMove() {
     if ((status === "playing" || status === "paused") && !showPlayer) {
       setShowPlayer(true);
@@ -127,64 +120,86 @@ export default function Home() {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
-      if (!isMouseOver) {
-        setShowPlayer(false);
-      }
-    }, 1000);
-  }
-  function handleMouseOver() {
-    setIsMouseOver(true);
-  }
-  function handleMouseOut() {
-    setIsMouseOver(false);
+    if (status !== "stopped") {
+      timeoutRef.current = setTimeout(() => {
+        if (!isMouseOver) {
+          setShowPlayer(false);
+        }
+      }, 1000);
+    }
   }
 
   return (
-    <main className={`${styles.main}`}>
-      <div
+    <main className={`${styles.mainPage}`}>
+      {" "}
+{/*       {showPlayer ? "showPlayer" : "no showPlayer"}
+ */}      <div
         onMouseMove={handleMouseMove}
         className={`${styles.slidesWrapper} ${
           status === "paused" || status === "playing" ? styles.playing : ""
         }`}
       >
         <Slides></Slides>
-        Slides Wrapper
-        {showPlayer && <PlayerControls setIsMouseOver={setIsMouseOver} />}
+        <div className={`${styles.playerControlsWrapper}`}>
+{/*           {showPlayer ? "showPlayer" : "no showPlayer"}
+ */}          {showPlayer && status !== "stopped" && (
+            <PlayerControls
+              key={1}
+              setIsMouseOver={setIsMouseOver}
+              setShowPlayer={setShowPlayer}
+            />
+          )}
+        </div>
       </div>
-      <div
-        className={`${styles.albumsContainer} 
-          ${status === "paused" || status === "playing" ? styles.playing : ""}`}
+      <section
+        className={`${styles.mainContainer}
+            ${
+              status === "paused" || status === "playing" ? styles.playing : ""
+            }`}
       >
         <div>
-          <button onClick={handlePlay}>Playaaaaa</button>
-          <h1>
-            {status} {/* {albumId} */}
-          </h1>
-          <h2>albums</h2>
-          <input type="text" placeholder="Search" onChange={handleSearch} />
-          <div className={styles.albumsList}>
-            {filteredAlbums.map((album) => (
-              <div className={styles.albumsItem} key={album.id}>
-                {album.name}
-                <button onClick={(e) => handleAdd(e, album)}>Add</button>
-              </div>
-            ))}
-          </div>
+          {showPlayer && (
+            <PlayerControls
+              setShowPlayer={setShowPlayer}
+              key={2}
+              setIsMouseOver={setIsMouseOver}
+            />
+          )}
         </div>
-        <div>
-          <h2>playlist</h2>
-          <div className={styles.albumsList}>
-            {playlist &&
-              playlist.map((album: AlbumType) => (
+        <div
+          className={`${styles.albumsContainer}
+            ${
+              status === "paused" || status === "playing" ? styles.playing : ""
+            }`}
+        >
+          <div>
+            <h1>
+              {status} {/* {albumId} */}
+            </h1>
+            <h2>albums</h2>
+            <input type="text" placeholder="Search" onChange={handleSearch} />
+            <div className={styles.albumsList}>
+              {filteredAlbums.map((album) => (
                 <div className={styles.albumsItem} key={album.id}>
-                  {album.name} <button>remove</button>
+                  {album.name}
+                  <button onClick={(e) => handleAdd(e, album)}>Add</button>
                 </div>
               ))}
+            </div>
+          </div>
+          <div>
+            <h2>playlist</h2>
+            <div className={styles.albumsList}>
+              {playlist &&
+                playlist.map((album: AlbumType) => (
+                  <div className={styles.albumsItem} key={album.id}>
+                    {album.name} <button>remove</button>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
-
