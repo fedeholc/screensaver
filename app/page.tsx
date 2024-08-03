@@ -132,8 +132,9 @@ export default function Home() {
   return (
     <main className={`${styles.mainPage}`}>
       {" "}
-{/*       {showPlayer ? "showPlayer" : "no showPlayer"}
- */}      <div
+      {/*       {showPlayer ? "showPlayer" : "no showPlayer"}
+       */}{" "}
+      <div
         onMouseMove={handleMouseMove}
         className={`${styles.slidesWrapper} ${
           status === "paused" || status === "playing" ? styles.playing : ""
@@ -141,8 +142,9 @@ export default function Home() {
       >
         <Slides></Slides>
         <div className={`${styles.playerControlsWrapper}`}>
-{/*           {showPlayer ? "showPlayer" : "no showPlayer"}
- */}          {showPlayer && status !== "stopped" && (
+          {/*           {showPlayer ? "showPlayer" : "no showPlayer"}
+           */}{" "}
+          {showPlayer && status !== "stopped" && (
             <PlayerControls
               key={1}
               setIsMouseOver={setIsMouseOver}
