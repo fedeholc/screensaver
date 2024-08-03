@@ -26,7 +26,7 @@ type AlbumType = {
 
 export default function Home() {
   const dispatch = useAppDispatch();
-  const albumId = useAppSelector(selectAlbumId);
+  //const albumId = useAppSelector(selectAlbumId);
   const status = useAppSelector(selectStatus);
 
   const albums: AlbumType[] = [
@@ -132,65 +132,11 @@ export default function Home() {
       }
     }, 1000);
   }
-
-  function PlayerControls() {
-    function handleMouseOver() {
-      setMouseOver(true);
-    }
-    function handleMouseOut() {
-      setMouseOver(false);
-    }
-    return (
-      <div
-        onMouseOverCapture={handleMouseOver}
-        onMouseOutCapture={handleMouseOut}
-        className={`${styles.playerContainer}`}
-      >
-        {status === "paused" && (
-          <button
-            id="buttonPlay"
-            className={`${styles.playerControl}`}
-            onClick={() => {
-              //setIsPaused(false);
-              //setIsPlaying(true);
-              dispatch(play());
-            }}
-          >
-            <PlayIcon className={styles.icon} />
-          </button>
-        )}
-
-        {status !== "paused" && (
-          <button
-            id="buttonPause"
-            className={`${styles.playerControl}`}
-            onClick={() => {
-              //setIsPaused(true);
-              //setIsPlaying(true);
-              dispatch(pause());
-            }}
-          >
-            <PauseIcon className={styles.icon} />
-          </button>
-        )}
-        <button
-          id="buttonStop"
-          className={`${styles.playerControl}`}
-          onClick={() => {
-            //setIsPaused(false);
-            //setIsPlaying(false);
-            dispatch(stop());
-          }} /* 
-          onMouseOverCapture={handleMouseOver}
-          onMouseOutCapture={handleMouseOut} */
-        >
-          <StopIcon className={styles.icon} />
-          <h1>
-            {status} {albumId}
-          </h1>
-        </button>
-      </div>
-    );
+  function handleMouseOver() {
+    setMouseOver(true);
+  }
+  function handleMouseOut() {
+    setMouseOver(false);
   }
 
   return (
@@ -203,7 +149,7 @@ export default function Home() {
       >
         <Slides></Slides>
         Slides Wrapper
-        {showPlayer && <PlayerControls />}
+        {showPlayer && <PlayerControls setMouseOver={setMouseOver} />}
       </div>
       <div
         className={`${styles.albumsContainer} 
@@ -212,7 +158,7 @@ export default function Home() {
         <div>
           <button onClick={handlePlay}>Playaaaaa</button>
           <h1>
-            {status} {albumId}
+            {status} {/* {albumId} */}
           </h1>
           <h2>albums</h2>
           <input type="text" placeholder="Search" onChange={handleSearch} />
@@ -238,5 +184,74 @@ export default function Home() {
         </div>
       </div>
     </main>
+  );
+}
+
+function PlayerControls({
+  setMouseOver,
+}: {
+  setMouseOver: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const albumId = useAppSelector(selectAlbumId);
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(selectStatus);
+
+  return (
+    <div
+      onMouseOver={() => {
+        setMouseOver(true);
+        console.log("over");
+      }}
+      onMouseOut={() => {
+        setMouseOver(false);
+        console.log("out");
+      }}
+      className={`${styles.playerContainer}`}
+    >
+      {status === "paused" && (
+        <button
+          id="buttonPlay"
+          className={`${styles.playerControl}`}
+          onClick={() => {
+            //setIsPaused(false);
+            //setIsPlaying(true);
+            dispatch(play());
+          }}
+        >
+          <PlayIcon className={styles.icon} />
+        </button>
+      )}
+
+      {status !== "paused" && (
+        <button
+          id="buttonPause"
+          className={`${styles.playerControl}`}
+          onClick={() => {
+            //setIsPaused(true);
+            //setIsPlaying(true);
+            dispatch(pause());
+          }}
+        >
+          <PauseIcon className={styles.icon} />
+        </button>
+      )}
+      <button
+        id="buttonStop"
+        className={`${styles.playerControl}`}
+        onClick={() => {
+          //setIsPaused(false);
+          //setIsPlaying(false);
+          dispatch(stop());
+        }} /* 
+          onMouseOverCapture={handleMouseOver}
+          onMouseOutCapture={handleMouseOut} */
+      >
+        <StopIcon className={styles.icon} />
+        <h1>
+          {status}
+          {albumId}
+        </h1>
+      </button>
+    </div>
   );
 }

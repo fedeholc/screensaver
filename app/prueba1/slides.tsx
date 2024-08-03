@@ -24,35 +24,26 @@ export default function Slides() {
   });
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-   //const [isPlaying, setIsPlaying] = useState(false);
 
   const intervalId = useRef<NodeJS.Timeout | undefined>();
 
   useEffect(() => {
-   // if (action === SlidesAction.PLAY) {
-      //setIsPlaying(true);
-    //}
-
-    //if (isPlaying) {
-    //if (action === SlidesAction.PLAY) {
     if (status === "playing") {
       intervalId.current = setInterval(() => {
         setCurrentImageIndex((prevIndex) => {
-          dispatch(setAlbumId(prevIndex));
           return (prevIndex + 1) % images.length;
         });
       }, 5000);
     }
     return () => clearInterval(intervalId.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    //TODO: por qué me pide incluirlo en el array de dependencias?
-  }, [images.length, dispatch, status]); //quite play y action
+  }, [images.length, status]);
 
   const currentImage = images[currentImageIndex];
 
   //también podría usar useref?
   // Preload next 3 images
   useEffect(() => {
+    dispatch(setAlbumId(currentImageIndex));
     const preloadImages = () => {
       //todo: ojo, está volviendo a cargar imagenes que ya están cargadas luego de la primera pasada
       for (let i = 1; i <= 3; i++) {
@@ -62,12 +53,13 @@ export default function Slides() {
       }
     };
     preloadImages();
-  }, [currentImageIndex, images]);
+  }, [currentImageIndex, images, dispatch]);
 
   return (
     <div
       style={{ backgroundImage: `${currentImage}` }}
-      className={`${styles.slides} ${status === "playing" || status === "paused" ? styles.playing : ""
+      className={`${styles.slides} ${
+        status === "playing" || status === "paused" ? styles.playing : ""
       }`}
     ></div>
   );
