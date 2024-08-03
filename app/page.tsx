@@ -6,6 +6,16 @@ import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import Slides from "./prueba1/slides";
 import { SlidesAction } from "./types";
 import { PauseIcon, StopIcon, PlayIcon } from "./icons";
+import {
+  play,
+  stop,
+  pause,
+  setAlbumId,
+  selectAlbumId,
+  selectStatus,
+} from "../lib/features/player/playerSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+
 //TODO: probar cascade layers en lugar de z-index
 
 type AlbumType = {
@@ -15,6 +25,10 @@ type AlbumType = {
 };
 
 export default function Home() {
+  const dispatch = useAppDispatch();
+  const albumId = useAppSelector(selectAlbumId);
+  const status = useAppSelector(selectStatus);
+
   const albums: AlbumType[] = [
     { id: 1, name: "Ansel Adams" },
     { id: 2, name: "Henri Cartier-Bresson" },
@@ -138,6 +152,7 @@ export default function Home() {
             onClick={() => {
               setIsPaused(false);
               setIsPlaying(true);
+              dispatch(play());
             }}
           >
             <PlayIcon className={styles.icon} />
@@ -151,6 +166,7 @@ export default function Home() {
             onClick={() => {
               setIsPaused(true);
               setIsPlaying(true);
+              dispatch(pause());
             }}
           >
             <PauseIcon className={styles.icon} />
@@ -162,11 +178,15 @@ export default function Home() {
           onClick={() => {
             setIsPaused(false);
             setIsPlaying(false);
+            dispatch(stop());
           }} /* 
           onMouseOverCapture={handleMouseOver}
           onMouseOutCapture={handleMouseOut} */
         >
           <StopIcon className={styles.icon} />
+          <h1>
+            {status} {albumId}
+          </h1>
         </button>
       </div>
     );
@@ -197,6 +217,9 @@ export default function Home() {
       >
         <div>
           <button onClick={handlePlay}>Playaaaaa</button>
+          <h1>
+            {status} {albumId}
+          </h1>
           <h2>albums</h2>
           <input type="text" placeholder="Search" onChange={handleSearch} />
           <div className={styles.albumsList}>

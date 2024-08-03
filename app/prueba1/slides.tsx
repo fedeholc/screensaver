@@ -5,6 +5,15 @@ import { useRef, useState } from "react";
 import { useEffect } from "react";
 import imageLinks from "./images.json";
 import { SlidesAction } from "../types";
+import {
+  play,
+  stop,
+  pause,
+  setAlbumId,
+  selectAlbumId,
+  selectStatus,
+} from "@/lib/features/player/playerSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 export default function Slides({
   play,
@@ -13,6 +22,7 @@ export default function Slides({
   play: boolean;
   action: SlidesAction;
 }) {
+  const dispatch = useAppDispatch();
   const images = imageLinks.map((link) => {
     return `url(${link})`;
   });
@@ -31,10 +41,15 @@ export default function Slides({
     //if (isPlaying) {
     if (action === SlidesAction.PLAY) {
       intervalId.current = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+        setCurrentImageIndex((prevIndex) => {
+          dispatch(setAlbumId(prevIndex));
+          return (prevIndex + 1) % images.length;
+        });
       }, 5000);
     }
     return () => clearInterval(intervalId.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    //TODO: por qué me pide incluirlo en el array de dependencias?
   }, [images.length, isPlaying, play, action]);
 
   const currentImage = images[currentImageIndex];
