@@ -3,9 +3,9 @@
 import styles from "./page.module.css";
 import FullScreenButton from "./fullScreenButton";
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
-import Slides from "./prueba1/slides";
+import Slides from "./Slides/Slides";
 import { SlidesAction } from "./types";
-import { PauseIcon, StopIcon, PlayIcon } from "./icons";
+import { PauseIcon, StopIcon, PlayIcon } from "./PlayerControls/icons";
 import {
   play,
   stop,
@@ -15,6 +15,7 @@ import {
   selectStatus,
 } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import PlayerControls from "./PlayerControls/PlayerControls";
 
 //TODO: probar cascade layers en lugar de z-index
 
@@ -88,7 +89,7 @@ export default function Home() {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
   //const [isPlaying, setIsPlaying] = useState(false);
   //const [isPaused, setIsPaused] = useState(false);
-  const [mouseOver, setMouseOver] = useState(false);
+  const [isMouseOver, setIsMouseOver] = useState(false);
 
   const [playlist, setPlayList]: [
     { id: number; name: string }[],
@@ -127,16 +128,16 @@ export default function Home() {
     }
 
     timeoutRef.current = setTimeout(() => {
-      if (!mouseOver) {
+      if (!isMouseOver) {
         setShowPlayer(false);
       }
     }, 1000);
   }
   function handleMouseOver() {
-    setMouseOver(true);
+    setIsMouseOver(true);
   }
   function handleMouseOut() {
-    setMouseOver(false);
+    setIsMouseOver(false);
   }
 
   return (
@@ -149,7 +150,7 @@ export default function Home() {
       >
         <Slides></Slides>
         Slides Wrapper
-        {showPlayer && <PlayerControls setMouseOver={setMouseOver} />}
+        {showPlayer && <PlayerControls setIsMouseOver={setIsMouseOver} />}
       </div>
       <div
         className={`${styles.albumsContainer} 
@@ -187,71 +188,3 @@ export default function Home() {
   );
 }
 
-function PlayerControls({
-  setMouseOver,
-}: {
-  setMouseOver: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  const albumId = useAppSelector(selectAlbumId);
-  const dispatch = useAppDispatch();
-  const status = useAppSelector(selectStatus);
-
-  return (
-    <div
-      onMouseOver={() => {
-        setMouseOver(true);
-        console.log("over");
-      }}
-      onMouseOut={() => {
-        setMouseOver(false);
-        console.log("out");
-      }}
-      className={`${styles.playerContainer}`}
-    >
-      {status === "paused" && (
-        <button
-          id="buttonPlay"
-          className={`${styles.playerControl}`}
-          onClick={() => {
-            //setIsPaused(false);
-            //setIsPlaying(true);
-            dispatch(play());
-          }}
-        >
-          <PlayIcon className={styles.icon} />
-        </button>
-      )}
-
-      {status !== "paused" && (
-        <button
-          id="buttonPause"
-          className={`${styles.playerControl}`}
-          onClick={() => {
-            //setIsPaused(true);
-            //setIsPlaying(true);
-            dispatch(pause());
-          }}
-        >
-          <PauseIcon className={styles.icon} />
-        </button>
-      )}
-      <button
-        id="buttonStop"
-        className={`${styles.playerControl}`}
-        onClick={() => {
-          //setIsPaused(false);
-          //setIsPlaying(false);
-          dispatch(stop());
-        }} /* 
-          onMouseOverCapture={handleMouseOver}
-          onMouseOutCapture={handleMouseOut} */
-      >
-        <StopIcon className={styles.icon} />
-        <h1>
-          {status}
-          {albumId}
-        </h1>
-      </button>
-    </div>
-  );
-}
