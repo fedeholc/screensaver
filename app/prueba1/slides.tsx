@@ -15,31 +15,27 @@ import {
 } from "@/lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
-export default function Slides({
-  play,
-  action,
-}: {
-  play: boolean;
-  action: SlidesAction;
-}) {
+export default function Slides() {
   const dispatch = useAppDispatch();
+  const status = useAppSelector(selectStatus);
+
   const images = imageLinks.map((link) => {
     return `url(${link})`;
   });
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  //  const [isPlaying, setIsPlaying] = useState(props.play);
-  const [isPlaying, setIsPlaying] = useState(false);
+   //const [isPlaying, setIsPlaying] = useState(false);
 
   const intervalId = useRef<NodeJS.Timeout | undefined>();
 
   useEffect(() => {
-    if (action === SlidesAction.PLAY) {
-      setIsPlaying(true);
-    }
+   // if (action === SlidesAction.PLAY) {
+      //setIsPlaying(true);
+    //}
 
     //if (isPlaying) {
-    if (action === SlidesAction.PLAY) {
+    //if (action === SlidesAction.PLAY) {
+    if (status === "playing") {
       intervalId.current = setInterval(() => {
         setCurrentImageIndex((prevIndex) => {
           dispatch(setAlbumId(prevIndex));
@@ -50,7 +46,7 @@ export default function Slides({
     return () => clearInterval(intervalId.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     //TODO: por qué me pide incluirlo en el array de dependencias?
-  }, [images.length, isPlaying, play, action,dispatch]);
+  }, [images.length, dispatch, status]); //quite play y action
 
   const currentImage = images[currentImageIndex];
 
@@ -71,7 +67,8 @@ export default function Slides({
   return (
     <div
       style={{ backgroundImage: `${currentImage}` }}
-      className={`${styles.slides} ${isPlaying ? styles.playing : ""}`}
+      className={`${styles.slides} ${status === "playing" || status === "paused" ? styles.playing : ""
+      }`}
     ></div>
   );
 }

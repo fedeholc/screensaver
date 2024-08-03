@@ -86,8 +86,8 @@ export default function Home() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  //const [isPlaying, setIsPlaying] = useState(false);
+  //const [isPaused, setIsPaused] = useState(false);
   const [mouseOver, setMouseOver] = useState(false);
 
   const [playlist, setPlayList]: [
@@ -113,11 +113,12 @@ export default function Home() {
   }
 
   function handlePlay() {
-    setIsPlaying(!isPlaying);
+    //setIsPlaying(!isPlaying);
+    dispatch(play());
   }
 
   function handleMouseMove() {
-    if (isPlaying && !showPlayer) {
+    if ((status === "playing" || status === "paused") && !showPlayer) {
       setShowPlayer(true);
     }
 
@@ -145,13 +146,13 @@ export default function Home() {
         onMouseOutCapture={handleMouseOut}
         className={`${styles.playerContainer}`}
       >
-        {isPaused && (
+        {status === "paused" && (
           <button
             id="buttonPlay"
             className={`${styles.playerControl}`}
             onClick={() => {
-              setIsPaused(false);
-              setIsPlaying(true);
+              //setIsPaused(false);
+              //setIsPlaying(true);
               dispatch(play());
             }}
           >
@@ -159,13 +160,13 @@ export default function Home() {
           </button>
         )}
 
-        {!isPaused && (
+        {status !== "paused" && (
           <button
             id="buttonPause"
             className={`${styles.playerControl}`}
             onClick={() => {
-              setIsPaused(true);
-              setIsPlaying(true);
+              //setIsPaused(true);
+              //setIsPlaying(true);
               dispatch(pause());
             }}
           >
@@ -176,8 +177,8 @@ export default function Home() {
           id="buttonStop"
           className={`${styles.playerControl}`}
           onClick={() => {
-            setIsPaused(false);
-            setIsPlaying(false);
+            //setIsPaused(false);
+            //setIsPlaying(false);
             dispatch(stop());
           }} /* 
           onMouseOverCapture={handleMouseOver}
@@ -196,24 +197,17 @@ export default function Home() {
     <main className={`${styles.main}`}>
       <div
         onMouseMove={handleMouseMove}
-        className={`${styles.slidesWrapper} ${isPlaying ? styles.playing : ""}`}
+        className={`${styles.slidesWrapper} ${
+          status === "paused" || status === "playing" ? styles.playing : ""
+        }`}
       >
-        <Slides
-          play={isPlaying}
-          action={
-            isPaused
-              ? SlidesAction.PAUSE
-              : isPlaying
-              ? SlidesAction.PLAY
-              : SlidesAction.STOP
-          }
-        ></Slides>
+        <Slides></Slides>
         Slides Wrapper
         {showPlayer && <PlayerControls />}
       </div>
       <div
         className={`${styles.albumsContainer} 
-          ${isPlaying ? styles.playing : ""}`}
+          ${status === "paused" || status === "playing" ? styles.playing : ""}`}
       >
         <div>
           <button onClick={handlePlay}>Playaaaaa</button>
