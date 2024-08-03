@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import styles from "../page.module.css";
+import styles from "./PlayerControls.module.css";
 import { PauseIcon, StopIcon, PlayIcon } from "@/app/PlayerControls/icons";
 import {
   play,

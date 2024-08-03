@@ -4,7 +4,6 @@ import styles from "./slides.module.css";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import imageLinks from "./images.json";
-import { SlidesAction } from "../types";
 import {
   play,
   stop,
