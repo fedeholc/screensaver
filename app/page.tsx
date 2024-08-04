@@ -128,7 +128,7 @@ export default function Home() {
             return { albumId: 1, link: link };
           });
           setPlayerList(temp);
-          console.log("data:", data);
+          //console.log("data:", data);
         });
     } else if (imageList.length > 0) {
       setPlayerList(imageList);
