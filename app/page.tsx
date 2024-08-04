@@ -119,17 +119,33 @@ export default function Home() {
     setFilteredAlbums(filtered);
   }
 
- useEffect(() => {
-   if (imageList.length === 0) {
-    let temp = album1.map((link) => {
-      return { albumId: 1, link: link };
-    });
-    setPlayerList(temp);
-    console.log(temp);
-  } else {
-    setPlayerList(imageList);
-  }
-}, [imageList]);
+  useEffect(() => {
+    if (imageList.length === 0) {
+      let al = fetch("/api/data")
+        .then((res) => res.json())
+        .then((data) => {
+          let temp = data.map((link: string) => {
+            return { albumId: 1, link: link };
+          });
+          setPlayerList(temp);
+          console.log("data:", data);
+        });
+    } else if (imageList.length > 0) {
+      setPlayerList(imageList);
+    }
+  }, [imageList]);
+
+  /*  useEffect(() => {
+    if (imageList.length === 0) {
+      let temp = album1.map((link) => {
+        return { albumId: 1, link: link };
+      });
+      setPlayerList(temp);
+      console.log(temp);
+    } else {
+      setPlayerList(imageList);
+    }
+  }, [imageList]); */
 
   function handleAdd(
     event: React.MouseEvent<HTMLButtonElement>,
