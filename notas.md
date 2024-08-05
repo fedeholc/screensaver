@@ -8,7 +8,7 @@ Album
 - nombre
 - descripcion
 - imagen
-- autor?? creo que no, podría tener varios si hay imagenes de distintos autores
+- fecha creacion
 
 Autor
 
@@ -16,7 +16,6 @@ Autor
 - nombre
 - descripcion
 - imagen
-- fecha creacion
 
 Imagenes
 
