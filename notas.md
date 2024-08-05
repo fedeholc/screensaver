@@ -16,6 +16,7 @@ Autor
 - nombre
 - descripcion
 - imagen
+- fecha creacion
 
 Imagenes
 
