@@ -1,24 +1,12 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
-import FullScreenButton from "./fullScreenButton";
 import React, { Dispatch, SetStateAction, use, useRef, useState } from "react";
 import Slides from "./Slides/Slides";
-import { SlidesAction } from "./types";
-import { PauseIcon, StopIcon, PlayIcon } from "./PlayerControls/icons";
-import {
-  play,
-  stop,
-  pause,
-  setAlbumId,
-  selectAlbumId,
-  selectStatus,
-} from "../lib/features/player/playerSlice";
+import { play, selectStatus } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import PlayerControls from "./PlayerControls/PlayerControls";
-import album1 from "./Slides/images1.json";
-import album2 from "./Slides/images2.json";
-import album3 from "./Slides/images3.json";
+
 import { useEffect } from "react";
 
 //TODO: probar cascade layers en lugar de z-index
@@ -35,117 +23,61 @@ export default function Home() {
   //const albumId = useAppSelector(selectAlbumId);
   const status = useAppSelector(selectStatus);
 
-  const albums: AlbumType[] = [
-    { id: 1, name: "Ansel Adams", links: album1 },
-    {
-      id: 2,
-      name: "Henri Cartier-Bresson",
-      links: album2,
-    },
-    { id: 3, name: "Salvador Dalí", links: album3 },
-    { id: 4, name: "Man Ray" },
-    { id: 5, name: "Dorothea Lange" },
-    { id: 6, name: "Irving Penn" },
-    { id: 7, name: "Richard Avedon" },
-    { id: 8, name: "Diane Arbus" },
-    { id: 9, name: "Helmut Newton" },
-    { id: 10, name: "Annie Leibovitz" },
-    { id: 11, name: "Steve McCurry" },
-    { id: 12, name: "David LaChapelle" },
-    { id: 13, name: "Nick Knight" },
-    { id: 14, name: "Terry Richardson" },
-    { id: 15, name: "Mario Testino" },
-    { id: 16, name: "Peter Lindbergh" },
-    { id: 17, name: "Patrick Demarchelier" },
-    { id: 18, name: "Ellen von Unwerth" },
-    { id: 19, name: "Bruce Weber" },
-    { id: 20, name: "Herb Ritts" },
-    { id: 21, name: "David Bailey" },
-    { id: 22, name: "Cecil Beaton" },
-    { id: 23, name: "Avedon" },
-    { id: 24, name: "Cindy Sherman" },
-    { id: 25, name: "Nan Goldin" },
-    { id: 26, name: "Sally Mann" },
-    { id: 27, name: "Carrie Mae Weems" },
-    { id: 28, name: "Leni Riefenstahl" },
-    { id: 29, name: "Walker Evans" },
-    { id: 30, name: "Edward Weston" },
-    { id: 31, name: "Paul Strand" },
-    { id: 32, name: "Alfred Stieglitz" },
-    { id: 33, name: "Georgia O'Keeffe" },
-    { id: 34, name: "Imogen Cunningham" },
-    { id: 35, name: "Barbra Kruger" },
-    { id: 36, name: "Cindy Sherman" },
-    { id: 37, name: "Sophie Calle" },
-    { id: 38, name: "Shirin Neshat" },
-    { id: 39, name: "Marina Abramović" },
-    { id: 40, name: "Yayoi Kusama" },
-    { id: 41, name: "Ai Weiwei" },
-    { id: 42, name: "Anish Kapoor" },
-    { id: 43, name: "Jeff Koons" },
-    { id: 44, name: "Damien Hirst" },
-    { id: 45, name: "Takashi Murakami" },
-    { id: 46, name: "Banksy" },
-    { id: 47, name: "Olafur Eliasson" },
-    { id: 48, name: "Helen Levitt" },
-    { id: 49, name: "Cai Guo-Qiang" },
-    { id: 50, name: "Zhang Huan" },
-  ];
-
+  const [albums, setAlbums] = useState<AlbumType[]>([]);
   const [showPlayer, setShowPlayer] = useState(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-  const [isMouseOver, setIsMouseOver] = useState(false);
+  const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
 
-  const [playlist, setPlayList]: [
-    { id: number; name: string }[],
-    Dispatch<SetStateAction<{ id: number; name: string }[]>>
-  ] = useState<{ id: number; name: string }[]>([]);
+  const [albumsPlaylist, setAlbumsPlaylist] = useState<AlbumType[]>([]);
 
   const [imageList, setImageList] = useState<
     { albumId: number; link: string }[]
   >([]);
 
-  const [playerList, setPlayerList] = useState<
+  const [ImagesPlaylist, setImagesPlaylist] = useState<
     { albumId: number; link: string }[]
   >([]);
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const search = event.target.value;
-    let filtered = albums.filter((photographer) =>
-      photographer.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setFilteredAlbums(filtered);
+    if (albums.length > 0) {
+      let filtered = albums.filter((album) => {
+        console.log("album:", album.name.toLowerCase().includes(search));
+        return album.name.toLowerCase().includes(search.toLowerCase());
+      });
+      console.log("filtered:", filtered);
+      setFilteredAlbums(filtered);
+    }
   }
 
   useEffect(() => {
     if (imageList.length === 0) {
-      let al = fetch("/api/data")
+      fetch("/api/data")
         .then((res) => res.json())
         .then((data) => {
           let temp = data.map((link: string) => {
             return { albumId: 1, link: link };
           });
-          setPlayerList(temp);
+          setImagesPlaylist(temp);
           //console.log("data:", data);
         });
     } else if (imageList.length > 0) {
-      setPlayerList(imageList);
+      setImagesPlaylist(imageList);
     }
   }, [imageList]);
 
-  /*  useEffect(() => {
-    if (imageList.length === 0) {
-      let temp = album1.map((link) => {
-        return { albumId: 1, link: link };
-      });
-      setPlayerList(temp);
-      console.log(temp);
-    } else {
-      setPlayerList(imageList);
+  useEffect(() => {
+    if (albums.length === 0) {
+      fetch("/api/albums")
+        .then((res) => res.json())
+        .then((data) => {
+          setAlbums(data);
+          setFilteredAlbums(data);
+        });
     }
-  }, [imageList]); */
+  });
 
   function handleAdd(
     event: React.MouseEvent<HTMLButtonElement>,
@@ -159,7 +91,22 @@ export default function Home() {
       });
       setImageList((prev) => [...prev, ...temp]);
     }
-    setPlayList((prev) => [...prev, album]);
+    setAlbumsPlaylist((prev) => [...prev, album]);
+  }
+
+  async function handlePlayAlbum(
+    event: React.MouseEvent<HTMLButtonElement>,
+    album: AlbumType
+  ) {
+    let response = await fetch("/api/album/" + album.id);
+    let data = await response.json();
+
+    if (data) {
+      let temp = data.map((img: any) => {
+        return { albumId: img.albumId, link: img.url };
+      });
+      setImageList(temp);
+    }
   }
 
   function handleMouseMove() {
@@ -173,7 +120,7 @@ export default function Home() {
 
     if (status !== "stopped") {
       timeoutRef.current = setTimeout(() => {
-        if (!isMouseOver) {
+        if (!isMouseOverPlayer) {
           setShowPlayer(false);
         }
       }, 1000);
@@ -182,24 +129,21 @@ export default function Home() {
 
   return (
     <main className={`${styles.mainPage}`}>
-      {" "}
-      {/*       {showPlayer ? "showPlayer" : "no showPlayer"}
-       */}{" "}
       <div
         onMouseMove={handleMouseMove}
         className={`${styles.slidesWrapper} ${
           status === "paused" || status === "playing" ? styles.playing : ""
         }`}
       >
-        {playerList.length > 0 && <Slides imageList={playerList}></Slides>}
+        {ImagesPlaylist.length > 0 && (
+          <Slides imageList={ImagesPlaylist}></Slides>
+        )}
 
         <div className={`${styles.playerControlsWrapper}`}>
-          {/*           {showPlayer ? "showPlayer" : "no showPlayer"}
-           */}{" "}
           {showPlayer && status !== "stopped" && (
             <PlayerControls
               key={1}
-              setIsMouseOver={setIsMouseOver}
+              setIsMouseOverPlayer={setIsMouseOverPlayer}
               setShowPlayer={setShowPlayer}
             />
           )}
@@ -216,7 +160,7 @@ export default function Home() {
             <PlayerControls
               setShowPlayer={setShowPlayer}
               key={2}
-              setIsMouseOver={setIsMouseOver}
+              setIsMouseOverPlayer={setIsMouseOverPlayer}
             />
           )}
         </div>
@@ -237,6 +181,15 @@ export default function Home() {
                 <div className={styles.albumsItem} key={album.id}>
                   {album.name}
                   <button onClick={(e) => handleAdd(e, album)}>Add</button>
+                  <button
+                    onClick={(e) => {
+                      handlePlayAlbum(e, album);
+                      setShowPlayer(false);
+                      dispatch(play());
+                    }}
+                  >
+                    Play
+                  </button>
                 </div>
               ))}
             </div>
@@ -244,8 +197,8 @@ export default function Home() {
           <div>
             <h2>playlist</h2>
             <div className={styles.albumsList}>
-              {playlist &&
-                playlist.map((album: AlbumType) => (
+              {albumsPlaylist &&
+                albumsPlaylist.map((album: AlbumType) => (
                   <div className={styles.albumsItem} key={album.id}>
                     {album.name} <button>remove</button>
                   </div>

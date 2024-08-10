@@ -13,10 +13,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 export default function PlayerControls({
-  setIsMouseOver: setIsMouseOver,
+  setIsMouseOverPlayer: setIsMouseOverPlayer,
   setShowPlayer: setShowPlayer,
 }: {
-  setIsMouseOver: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsMouseOverPlayer: React.Dispatch<React.SetStateAction<boolean>>;
   setShowPlayer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const albumId = useAppSelector(selectAlbumId);
@@ -25,8 +25,8 @@ export default function PlayerControls({
 
   return (
     <div
-      onMouseOver={() => setIsMouseOver(true)}
-      onMouseOut={() => setIsMouseOver(false)}
+      onMouseOver={() => setIsMouseOverPlayer(true)}
+      onMouseOut={() => setIsMouseOverPlayer(false)}
       className={`${styles.playerContainer}`}
     >
       {status !== "playing" && (
@@ -35,7 +35,7 @@ export default function PlayerControls({
           className={`${styles.playerControl}`}
           onClick={() => {
             setShowPlayer(false);
-            setIsMouseOver(false);
+            setIsMouseOverPlayer(false);
             dispatch(play());
           }}
         >
