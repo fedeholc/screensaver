@@ -32,11 +32,11 @@ export default function Home() {
 
   const [albumsPlaylist, setAlbumsPlaylist] = useState<AlbumType[]>([]);
 
-  const [imageList, setImageList] = useState<
+  /*   const [imageList, setImageList] = useState<
     { albumId: number; link: string }[]
-  >([]);
+  >([]); */
 
-  const [ImagesPlaylist, setImagesPlaylist] = useState<
+  const [imagesPlaylist, setImagesPlaylist] = useState<
     { albumId: number; link: string }[]
   >([]);
 
@@ -53,7 +53,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (imageList.length === 0) {
+    if (imagesPlaylist.length === 0) {
       fetch("/api/data")
         .then((res) => res.json())
         .then((data) => {
@@ -63,10 +63,10 @@ export default function Home() {
           setImagesPlaylist(temp);
           //console.log("data:", data);
         });
-    } else if (imageList.length > 0) {
-      setImagesPlaylist(imageList);
+    } else if (imagesPlaylist.length > 0) {
+      setImagesPlaylist(imagesPlaylist);
     }
-  }, [imageList]);
+  }, [imagesPlaylist]);
 
   useEffect(() => {
     if (albums.length === 0) {
@@ -83,14 +83,6 @@ export default function Home() {
     event: React.MouseEvent<HTMLButtonElement>,
     album: AlbumType
   ) {
-    console.log(event);
-    console.log(album);
-    if (album && album.links) {
-      let temp = album.links.map((link) => {
-        return { albumId: album.id, link: link };
-      });
-      setImageList((prev) => [...prev, ...temp]);
-    }
     setAlbumsPlaylist((prev) => [...prev, album]);
   }
 
@@ -105,7 +97,7 @@ export default function Home() {
       let temp = data.map((img: any) => {
         return { albumId: img.albumId, link: img.url };
       });
-      setImageList(temp);
+      setImagesPlaylist(temp);
     }
   }
 
@@ -135,8 +127,8 @@ export default function Home() {
           status === "paused" || status === "playing" ? styles.playing : ""
         }`}
       >
-        {ImagesPlaylist.length > 0 && (
-          <Slides imageList={ImagesPlaylist}></Slides>
+        {imagesPlaylist.length > 0 && (
+          <Slides imageList={imagesPlaylist}></Slides>
         )}
 
         <div className={`${styles.playerControlsWrapper}`}>
@@ -201,17 +193,6 @@ export default function Home() {
                 albumsPlaylist.map((album: AlbumType) => (
                   <div className={styles.albumsItem} key={album.id}>
                     {album.name} <button>remove</button>
-                  </div>
-                ))}
-            </div>
-          </div>
-          <div>
-            <h2>Imagelist</h2>
-            <div className={styles.albumsList}>
-              {imageList &&
-                imageList.map((image) => (
-                  <div className={styles.albumsItem} key={image.link}>
-                    {image.link} <button>remove</button>
                   </div>
                 ))}
             </div>
