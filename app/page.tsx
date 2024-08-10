@@ -1,13 +1,23 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
-import React, { Dispatch, SetStateAction, use, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  use,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import Slides from "./Slides/Slides";
 import { play, selectStatus } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import PlayerControls from "./PlayerControls/PlayerControls";
-
+import { AppContext } from "./AppContext";
+import { useContext } from "react";
 import { useEffect } from "react";
+import AlbumsPlayList from "./AlbumsPlaylist";
+import { AppContextProvider } from "./AppContext";
 
 //TODO: probar cascade layers en lugar de z-index
 
@@ -19,8 +29,9 @@ type AlbumType = {
 };
 
 export default function Home() {
+  const { albumsPlaylist, albumsPlaylistDispatch } = useContext(AppContext);
+
   const dispatch = useAppDispatch();
-  //const albumId = useAppSelector(selectAlbumId);
   const status = useAppSelector(selectStatus);
 
   const [albums, setAlbums] = useState<AlbumType[]>([]);
@@ -29,12 +40,6 @@ export default function Home() {
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
   const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
-
-  const [albumsPlaylist, setAlbumsPlaylist] = useState<AlbumType[]>([]);
-
-  /*   const [imageList, setImageList] = useState<
-    { albumId: number; link: string }[]
-  >([]); */
 
   const [imagesPlaylist, setImagesPlaylist] = useState<
     { albumId: number; link: string }[]
@@ -47,7 +52,6 @@ export default function Home() {
         console.log("album:", album.name.toLowerCase().includes(search));
         return album.name.toLowerCase().includes(search.toLowerCase());
       });
-      console.log("filtered:", filtered);
       setFilteredAlbums(filtered);
     }
   }
@@ -61,7 +65,6 @@ export default function Home() {
             return { albumId: 1, link: link };
           });
           setImagesPlaylist(temp);
-          //console.log("data:", data);
         });
     } else if (imagesPlaylist.length > 0) {
       setImagesPlaylist(imagesPlaylist);
@@ -83,7 +86,9 @@ export default function Home() {
     event: React.MouseEvent<HTMLButtonElement>,
     album: AlbumType
   ) {
-    setAlbumsPlaylist((prev) => [...prev, album]);
+    console.log("add", album);
+    albumsPlaylistDispatch({ type: "add", payload: album });
+    //setAlbumsPlaylist((prev) => [...prev, album]);
   }
 
   async function handlePlayAlbum(
@@ -130,7 +135,6 @@ export default function Home() {
         {imagesPlaylist.length > 0 && (
           <Slides imageList={imagesPlaylist}></Slides>
         )}
-
         <div className={`${styles.playerControlsWrapper}`}>
           {showPlayer && status !== "stopped" && (
             <PlayerControls
@@ -143,9 +147,11 @@ export default function Home() {
       </div>
       <section
         className={`${styles.mainContainer}
-            ${
-              status === "paused" || status === "playing" ? styles.playing : ""
-            }`}
+              ${
+                status === "paused" || status === "playing"
+                  ? styles.playing
+                  : ""
+              }`}
       >
         <div>
           {showPlayer && (
@@ -158,9 +164,11 @@ export default function Home() {
         </div>
         <div
           className={`${styles.albumsContainer}
-            ${
-              status === "paused" || status === "playing" ? styles.playing : ""
-            }`}
+              ${
+                status === "paused" || status === "playing"
+                  ? styles.playing
+                  : ""
+              }`}
         >
           <div>
             <h1>
@@ -186,17 +194,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div>
-            <h2>playlist</h2>
-            <div className={styles.albumsList}>
-              {albumsPlaylist &&
-                albumsPlaylist.map((album: AlbumType) => (
-                  <div className={styles.albumsItem} key={album.id}>
-                    {album.name} <button>remove</button>
-                  </div>
-                ))}
-            </div>
-          </div>
+          <AlbumsPlayList />
         </div>
       </section>
     </main>

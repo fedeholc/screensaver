@@ -5,6 +5,7 @@ import "./styles/colors.css";
 import "./styles/globals.css";
 import { StoreProvider } from "./StoreProvider";
 import { Provider } from "react-redux";
+import { AppContextProvider } from "./AppContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <StoreProvider>
-        <body className={inter.className}>{children}</body>
+        <AppContextProvider>
+          <body className={inter.className}>{children}</body>
+        </AppContextProvider>
       </StoreProvider>
     </html>
   );
