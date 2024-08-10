@@ -1,4 +1,4 @@
-.main {
+.mainPage {
   display: flex;
   flex-direction: row;
   height: 100vh;
@@ -9,10 +9,26 @@
 
 }
 
+.mainContainer {
+  z-index: var(--ZI_mainContainer_stopped)
+}
+
+.mainContainer.playing {
+  z-index: var(--ZI_mainContainer_playing);
+}
+
+.playerControlsWrapper {
+  display: flex;
+  height: 100%;
+  place-content: center;
+  align-items: center;
+}
+
 .albumsContainer {
   display: flex;
   flex-direction: row;
-  z-index: var(--ZI_albumsContainer_stopped)
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
 }
 
 .albumsList {
@@ -28,9 +44,6 @@
   }
 }
 
-.albumsContainer.playing {
-  z-index: var(--ZI_albumsContainer_playing);
-}
 
 .slidesWrapper {
   display: flex;
@@ -44,9 +57,6 @@
   background: none;
 }
 
-.slidesWrapper.playing {
-  cursor: pointer;
-}
 
 .hidden {
   opacity: 0;

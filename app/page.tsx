@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
 import FullScreenButton from "./fullScreenButton";
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, use, useRef, useState } from "react";
 import Slides from "./Slides/Slides";
 import { SlidesAction } from "./types";
 import { PauseIcon, StopIcon, PlayIcon } from "./PlayerControls/icons";
@@ -16,12 +16,17 @@ import {
 } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import PlayerControls from "./PlayerControls/PlayerControls";
+import album1 from "./Slides/images1.json";
+import album2 from "./Slides/images2.json";
+import album3 from "./Slides/images3.json";
+import { useEffect } from "react";
 
 //TODO: probar cascade layers en lugar de z-index
 
 type AlbumType = {
   id: number;
   name: string;
+  links?: string[];
   // otros campos del álbum si existen
 };
 
@@ -31,9 +36,13 @@ export default function Home() {
   const status = useAppSelector(selectStatus);
 
   const albums: AlbumType[] = [
-    { id: 1, name: "Ansel Adams" },
-    { id: 2, name: "Henri Cartier-Bresson" },
-    { id: 3, name: "Salvador Dalí" },
+    { id: 1, name: "Ansel Adams", links: album1 },
+    {
+      id: 2,
+      name: "Henri Cartier-Bresson",
+      links: album2,
+    },
+    { id: 3, name: "Salvador Dalí", links: album3 },
     { id: 4, name: "Man Ray" },
     { id: 5, name: "Dorothea Lange" },
     { id: 6, name: "Irving Penn" },
@@ -83,18 +92,24 @@ export default function Home() {
     { id: 50, name: "Zhang Huan" },
   ];
 
-  const [showPlayer, setShowPlayer] = useState(false);
+  const [showPlayer, setShowPlayer] = useState(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-  //const [isPlaying, setIsPlaying] = useState(false);
-  //const [isPaused, setIsPaused] = useState(false);
   const [isMouseOver, setIsMouseOver] = useState(false);
 
   const [playlist, setPlayList]: [
     { id: number; name: string }[],
     Dispatch<SetStateAction<{ id: number; name: string }[]>>
   ] = useState<{ id: number; name: string }[]>([]);
+
+  const [imageList, setImageList] = useState<
+    { albumId: number; link: string }[]
+  >([]);
+
+  const [playerList, setPlayerList] = useState<
+    { albumId: number; link: string }[]
+  >([]);
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const search = event.target.value;
@@ -104,18 +119,47 @@ export default function Home() {
     setFilteredAlbums(filtered);
   }
 
+  useEffect(() => {
+    if (imageList.length === 0) {
+      let al = fetch("/api/data")
+        .then((res) => res.json())
+        .then((data) => {
+          let temp = data.map((link: string) => {
+            return { albumId: 1, link: link };
+          });
+          setPlayerList(temp);
+          //console.log("data:", data);
+        });
+    } else if (imageList.length > 0) {
+      setPlayerList(imageList);
+    }
+  }, [imageList]);
+
+  /*  useEffect(() => {
+    if (imageList.length === 0) {
+      let temp = album1.map((link) => {
+        return { albumId: 1, link: link };
+      });
+      setPlayerList(temp);
+      console.log(temp);
+    } else {
+      setPlayerList(imageList);
+    }
+  }, [imageList]); */
+
   function handleAdd(
     event: React.MouseEvent<HTMLButtonElement>,
     album: AlbumType
   ) {
     console.log(event);
     console.log(album);
+    if (album && album.links) {
+      let temp = album.links.map((link) => {
+        return { albumId: album.id, link: link };
+      });
+      setImageList((prev) => [...prev, ...temp]);
+    }
     setPlayList((prev) => [...prev, album]);
-  }
-
-  function handlePlay() {
-    //setIsPlaying(!isPlaying);
-    dispatch(play());
   }
 
   function handleMouseMove() {
@@ -127,64 +171,100 @@ export default function Home() {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
-      if (!isMouseOver) {
-        setShowPlayer(false);
-      }
-    }, 1000);
-  }
-  function handleMouseOver() {
-    setIsMouseOver(true);
-  }
-  function handleMouseOut() {
-    setIsMouseOver(false);
+    if (status !== "stopped") {
+      timeoutRef.current = setTimeout(() => {
+        if (!isMouseOver) {
+          setShowPlayer(false);
+        }
+      }, 1000);
+    }
   }
 
   return (
-    <main className={`${styles.main}`}>
+    <main className={`${styles.mainPage}`}>
+      {" "}
+      {/*       {showPlayer ? "showPlayer" : "no showPlayer"}
+       */}{" "}
       <div
         onMouseMove={handleMouseMove}
         className={`${styles.slidesWrapper} ${
           status === "paused" || status === "playing" ? styles.playing : ""
         }`}
       >
-        <Slides></Slides>
-        Slides Wrapper
-        {showPlayer && <PlayerControls setIsMouseOver={setIsMouseOver} />}
+        {playerList.length > 0 && <Slides imageList={playerList}></Slides>}
+
+        <div className={`${styles.playerControlsWrapper}`}>
+          {/*           {showPlayer ? "showPlayer" : "no showPlayer"}
+           */}{" "}
+          {showPlayer && status !== "stopped" && (
+            <PlayerControls
+              key={1}
+              setIsMouseOver={setIsMouseOver}
+              setShowPlayer={setShowPlayer}
+            />
+          )}
+        </div>
       </div>
-      <div
-        className={`${styles.albumsContainer} 
-          ${status === "paused" || status === "playing" ? styles.playing : ""}`}
+      <section
+        className={`${styles.mainContainer}
+            ${
+              status === "paused" || status === "playing" ? styles.playing : ""
+            }`}
       >
         <div>
-          <button onClick={handlePlay}>Playaaaaa</button>
-          <h1>
-            {status} {/* {albumId} */}
-          </h1>
-          <h2>albums</h2>
-          <input type="text" placeholder="Search" onChange={handleSearch} />
-          <div className={styles.albumsList}>
-            {filteredAlbums.map((album) => (
-              <div className={styles.albumsItem} key={album.id}>
-                {album.name}
-                <button onClick={(e) => handleAdd(e, album)}>Add</button>
-              </div>
-            ))}
-          </div>
+          {showPlayer && (
+            <PlayerControls
+              setShowPlayer={setShowPlayer}
+              key={2}
+              setIsMouseOver={setIsMouseOver}
+            />
+          )}
         </div>
-        <div>
-          <h2>playlist</h2>
-          <div className={styles.albumsList}>
-            {playlist &&
-              playlist.map((album: AlbumType) => (
+        <div
+          className={`${styles.albumsContainer}
+            ${
+              status === "paused" || status === "playing" ? styles.playing : ""
+            }`}
+        >
+          <div>
+            <h1>
+              {status} {/* {albumId} */}
+            </h1>
+            <h2>albums</h2>
+            <input type="text" placeholder="Search" onChange={handleSearch} />
+            <div className={styles.albumsList}>
+              {filteredAlbums.map((album) => (
                 <div className={styles.albumsItem} key={album.id}>
-                  {album.name} <button>remove</button>
+                  {album.name}
+                  <button onClick={(e) => handleAdd(e, album)}>Add</button>
                 </div>
               ))}
+            </div>
+          </div>
+          <div>
+            <h2>playlist</h2>
+            <div className={styles.albumsList}>
+              {playlist &&
+                playlist.map((album: AlbumType) => (
+                  <div className={styles.albumsItem} key={album.id}>
+                    {album.name} <button>remove</button>
+                  </div>
+                ))}
+            </div>
+          </div>
+          <div>
+            <h2>Imagelist</h2>
+            <div className={styles.albumsList}>
+              {imageList &&
+                imageList.map((image) => (
+                  <div className={styles.albumsItem} key={image.link}>
+                    {image.link} <button>remove</button>
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
-

@@ -14,8 +14,10 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 export default function PlayerControls({
   setIsMouseOver: setIsMouseOver,
+  setShowPlayer: setShowPlayer,
 }: {
   setIsMouseOver: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowPlayer: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const albumId = useAppSelector(selectAlbumId);
   const dispatch = useAppDispatch();
@@ -27,20 +29,24 @@ export default function PlayerControls({
       onMouseOut={() => setIsMouseOver(false)}
       className={`${styles.playerContainer}`}
     >
-      {status === "paused" && (
+      {status !== "playing" && (
         <button
-          id="buttonPlay"
+          /* id="buttonPlay" */
           className={`${styles.playerControl}`}
-          onClick={() => dispatch(play())}
+          onClick={() => {
+            setShowPlayer(false);
+            setIsMouseOver(false);
+            dispatch(play());
+          }}
         >
           <PlayIcon className={styles.icon} />
         </button>
       )}
 
-      {status !== "paused" && (
+      {status === "playing" && (
         <button
-          id="buttonPause"
-          className={`${styles.playerControl}`}
+          /*           id="buttonPause"
+           */ className={`${styles.playerControl}`}
           onClick={() => dispatch(pause())}
         >
           <PauseIcon className={styles.icon} />
@@ -48,15 +54,15 @@ export default function PlayerControls({
       )}
 
       <button
-        id="buttonStop"
-        className={`${styles.playerControl}`}
+        /*         id="buttonStop"
+         */ className={`${styles.playerControl}`}
         onClick={() => dispatch(stop())}
       >
         <StopIcon className={styles.icon} />
-        <h1>
+        {/*       <h1>
           {status}
           {albumId}
-        </h1>
+        </h1> */}
       </button>
     </div>
   );
