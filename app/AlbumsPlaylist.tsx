@@ -1,5 +1,5 @@
 import styles from "./page.module.css";
-import { AppContext } from "./AppContext"; 
+import { AppContext } from "./AppContext";
 import { useContext } from "react";
 import { AppContextProvider } from "./AppContext";
 type AlbumType = {
@@ -8,9 +8,9 @@ type AlbumType = {
   links?: string[];
   // otros campos del álbum si existen
 };
-export default  function AlbumsPlaylist() {
-
-  const {albumsPlaylist, albumsPlaylistDispatch} = useContext(AppContext);
+export default function AlbumsPlaylist() {
+  const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } =
+    useContext(AppContext);
 
   return (
     <div>
@@ -23,17 +23,8 @@ export default  function AlbumsPlaylist() {
               key={album.id + index.toString()}
             >
               {album.name}{" "}
-                 <button
-                  onClick={() => {
-                    albumsPlaylistDispatch({
-                      type: "remove",
-                      payload: index,
-                    });
-                  }}
-                >
-                  remove
-                </button>
-             </div>
+              <button onClick={() => albumsPL.remove(index)}>remove</button>
+            </div>
           ))}
       </div>
     </div>

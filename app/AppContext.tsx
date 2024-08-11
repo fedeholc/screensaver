@@ -30,9 +30,14 @@ import { Dispatch } from "react";
 export const AppContext = createContext<{
   albumsPlaylist: AlbumType[];
   albumsPlaylistDispatch: Dispatch<AplAction>;
+  albumsPL: {
+    add: (album: AlbumType) => void;
+    remove: (index: number) => void;
+  };
 }>({
   albumsPlaylist: [],
   albumsPlaylistDispatch: () => null,
+  albumsPL: { add: () => null, remove: () => null },
 });
 
 export function AppContextProvider({
@@ -44,8 +49,19 @@ export function AppContextProvider({
     albumsPlaylistReducer,
     []
   );
+
+  const albumsPL = {
+    add: function (album: AlbumType) {
+      albumsPlaylistDispatch({ type: "add", payload: album });
+    },
+    remove: function (index: number) {
+      albumsPlaylistDispatch({ type: "remove", payload: index });
+    },
+  };
   return (
-    <AppContext.Provider value={{ albumsPlaylist, albumsPlaylistDispatch }}>
+    <AppContext.Provider
+      value={{ albumsPlaylist, albumsPlaylistDispatch, albumsPL }}
+    >
       {children}
     </AppContext.Provider>
   );

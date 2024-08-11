@@ -29,7 +29,7 @@ type AlbumType = {
 };
 
 export default function Home() {
-  const { albumsPlaylist, albumsPlaylistDispatch } = useContext(AppContext);
+  const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } = useContext(AppContext);
 
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
@@ -87,7 +87,8 @@ export default function Home() {
     album: AlbumType
   ) {
     console.log("add", album);
-    albumsPlaylistDispatch({ type: "add", payload: album });
+    albumsPL.add(album);
+    //albumsPlaylistDispatch({ type: "add", payload: album });
     //setAlbumsPlaylist((prev) => [...prev, album]);
   }
 
