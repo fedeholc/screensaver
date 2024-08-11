@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import styles from "./PlayerControls.module.css";
-import { PauseIcon, StopIcon, PlayIcon } from "@/app/PlayerControls/icons";
+import { PauseIcon, StopIcon, PlayIcon } from "./icons";
 import {
   play,
   stop,
@@ -31,7 +31,7 @@ export default function PlayerControls({
     >
       {status !== "playing" && (
         <button
-          /* id="buttonPlay" */
+          aria-label="play"
           className={`${styles.playerControl}`}
           onClick={() => {
             setShowPlayer(false);
@@ -45,8 +45,8 @@ export default function PlayerControls({
 
       {status === "playing" && (
         <button
-          /*           id="buttonPause"
-           */ className={`${styles.playerControl}`}
+          aria-label="pause"
+          className={`${styles.playerControl}`}
           onClick={() => dispatch(pause())}
         >
           <PauseIcon className={styles.icon} />
@@ -54,15 +54,11 @@ export default function PlayerControls({
       )}
 
       <button
-        /*         id="buttonStop"
-         */ className={`${styles.playerControl}`}
+        aria-label="stop"
+        className={`${styles.playerControl}`}
         onClick={() => dispatch(stop())}
       >
         <StopIcon className={styles.icon} />
-        {/*       <h1>
-          {status}
-          {albumId}
-        </h1> */}
       </button>
     </div>
   );

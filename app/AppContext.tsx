@@ -1,17 +1,17 @@
 "use client";
 import { createContext, useContext, useReducer } from "react";
-type AlbumType = {
+export type AlbumType = {
   id: number;
   name: string;
   links?: string[];
   // otros campos del álbum si existen
 };
 
-type AplAction =
+export type AplAction =
   | { type: "add"; payload: AlbumType }
   | { type: "remove"; payload: number };
 
-function albumsPlaylistReducer(
+export function albumsPlaylistReducer(
   albumsPlaylist: AlbumType[],
   action: AplAction
 ): AlbumType[] {
