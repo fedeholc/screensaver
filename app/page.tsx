@@ -29,7 +29,8 @@ type AlbumType = {
 };
 
 export default function Home() {
-  const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } = useContext(AppContext);
+  const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } =
+    useContext(AppContext);
 
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
@@ -177,25 +178,29 @@ export default function Home() {
             </h1>
             <h2>albums</h2>
             <input type="text" placeholder="Search" onChange={handleSearch} />
-            <div className={styles.albumsList}>
-              {filteredAlbums.map((album) => (
-                <div className={styles.albumsItem} key={album.id}>
-                  {album.name}
-                  <button onClick={(e) => handleAdd(e, album)}>Add</button>
-                  <button
-                    onClick={(e) => {
-                      handlePlayAlbum(e, album);
-                      setShowPlayer(false);
-                      dispatch(play());
-                    }}
-                  >
-                    Play
-                  </button>
-                </div>
-              ))}
-            </div>
+            <AppContextProvider>
+              <div className={styles.albumsList}>
+                {filteredAlbums.map((album) => (
+                  <div className={styles.albumsItem} key={album.id}>
+                    {album.name}
+                    <button onClick={(e) => handleAdd(e, album)}>Add</button>
+                    <button
+                      onClick={(e) => {
+                        handlePlayAlbum(e, album);
+                        setShowPlayer(false);
+                        dispatch(play());
+                      }}
+                    >
+                      Play
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </AppContextProvider>
           </div>
-          <AlbumsPlayList />
+          <AppContextProvider>
+            <AlbumsPlayList />
+          </AppContextProvider>
         </div>
       </section>
     </main>
