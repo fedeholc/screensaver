@@ -50,7 +50,6 @@ export default function Home() {
     const search = event.target.value;
     if (albums.length > 0) {
       let filtered = albums.filter((album) => {
-        console.log("album:", album.name.toLowerCase().includes(search));
         return album.name.toLowerCase().includes(search.toLowerCase());
       });
       setFilteredAlbums(filtered);
@@ -59,14 +58,18 @@ export default function Home() {
 
   useEffect(() => {
     if (imagesPlaylist.length === 0) {
-      fetch("/api/data")
-        .then((res) => res.json())
-        .then((data) => {
-          let temp = data.map((link: string) => {
-            return { albumId: 1, link: link };
+      try {
+        fetch("/api/data")
+          .then((res) => res.json())
+          .then((data) => {
+            let temp = data.map((link: string) => {
+              return { albumId: 1, link: link };
+            });
+            setImagesPlaylist(temp);
           });
-          setImagesPlaylist(temp);
-        });
+      } catch (e) {
+        console.log(e);
+      }
     } else if (imagesPlaylist.length > 0) {
       setImagesPlaylist(imagesPlaylist);
     }
@@ -126,13 +129,17 @@ export default function Home() {
     }
   }
 
+  let statusStyle = {
+    paused: styles.playing,
+    playing: styles.playing,
+    stopped: "",
+  };
+
   return (
     <main className={`${styles.mainPage}`}>
       <div
         onMouseMove={handleMouseMove}
-        className={`${styles.slidesWrapper} ${
-          status === "paused" || status === "playing" ? styles.playing : ""
-        }`}
+        className={`${styles.slidesWrapper} ${statusStyle[status]}`}
       >
         {imagesPlaylist.length > 0 && (
           <Slides imageList={imagesPlaylist}></Slides>
@@ -148,12 +155,8 @@ export default function Home() {
         </div>
       </div>
       <section
-        className={`${styles.mainContainer}
-              ${
-                status === "paused" || status === "playing"
-                  ? styles.playing
-                  : ""
-              }`}
+        /*  className={`${styles.mainContainer} ${status === "paused" || status === "playing" ? styles.playing: "" }`} */
+        className={`${styles.mainContainer} ${statusStyle[status]}`}
       >
         <div>
           {showPlayer && (
@@ -164,18 +167,8 @@ export default function Home() {
             />
           )}
         </div>
-        <div
-          className={`${styles.albumsContainer}
-              ${
-                status === "paused" || status === "playing"
-                  ? styles.playing
-                  : ""
-              }`}
-        >
+        <div className={`${styles.albumsContainer}${statusStyle[status]}`}>
           <div>
-            <h1>
-              {status} {/* {albumId} */}
-            </h1>
             <h2>albums</h2>
             <input type="text" placeholder="Search" onChange={handleSearch} />
             <AppContextProvider>
