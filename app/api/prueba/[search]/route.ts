@@ -7,7 +7,8 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { search: string } }
 ) {
-  const searchParams = request.nextUrl.searchParams.get("page")
+
+  //TODO: ojo, tal vez convenga hacer todo con searchParams para la busqueda por el tema de los espacios
 
   const page = request.nextUrl.searchParams.get("page") || "1";
   const limit = 20;
@@ -61,23 +62,28 @@ function createDbConnection(filepath: string): sqlite3.Database {
   });
 }
 
-/**
- export async function GET(
-  request: Request,
-  { params }: { params: { search: string, page?: string, limit?: string } }
-) {
-  const db = createDbConnection("./images.db");
+//? con express
+/*
+const express = require('express');
+const sqlite3 = require('sqlite3');
+const fs = require('fs');
 
-  // Obtener los parámetros de paginación
-  const page = parseInt(params.page || "1", 10);
-  const limit = parseInt(params.limit || "10", 10);
+const app = express();
+const port = 3000;
+
+// Ruta GET equivalente
+app.get('/search/:search', async (req, res) => {
+  const search = req.params.search;
+  const page = parseInt(req.query.page || '1', 10);
+  const limit = 20;
   const offset = (page - 1) * limit;
 
-  const sql = `SELECT * FROM image WHERE INSTR(url, '${params.search}') > 0 LIMIT ${limit} OFFSET ${offset};`;
+  const db = createDbConnection('./images.db');
+  const sql = `SELECT * FROM image WHERE INSTR(url, ?) > 0 LIMIT ? OFFSET ?`;
 
   try {
     const rows = await new Promise((resolve, reject) => {
-      db.all(sql, [], (error, rows) => {
+      db.all(sql, [search, limit, offset], (error, rows) => {
         if (error) {
           reject(error);
         } else {
@@ -86,12 +92,45 @@ function createDbConnection(filepath: string): sqlite3.Database {
       });
     });
 
-    return Response.json(rows);
+    res.json(rows);
   } catch (error) {
     console.error(error);
-    return Response.json(error);
+    res.status(500).json({ error: 'Database error' });
   } finally {
     closeDbConnection(db);
   }
+});
+
+// Función para cerrar la conexión a la base de datos
+function closeDbConnection(db) {
+  db.close((error) => {
+    if (error) {
+      console.error('Error closing the database connection:', error.message);
+    } else {
+      console.log('Database connection closed');
+    }
+  });
 }
- */
+
+// Función para crear la conexión a la base de datos
+function createDbConnection(filepath) {
+  if (fs.existsSync(filepath)) {
+    console.log('Database already exists');
+  } else {
+    console.log('Creating database');
+  }
+
+  return new sqlite3.Database(filepath, (error) => {
+    if (error) {
+      console.error('Error connecting to the database:', error.message);
+    } else {
+      console.log('Connection with SQLite has been established');
+    }
+  });
+}
+
+// Inicia el servidor en el puerto 3000
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+*/
