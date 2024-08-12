@@ -9,9 +9,12 @@ export async function GET(
 ) {
   const searchParams = request.nextUrl.searchParams.get("page")
 
-  console.log("p:", searchParams);
+  const page = request.nextUrl.searchParams.get("page") || "1";
+  const limit = 20;
+  const offset = ((parseInt(page) - 1) * limit);
+
   const db = createDbConnection("./images.db");
-  const sql = `SELECT * FROM image WHERE INSTR(url, '${params.search}') >  0 LIMIT 10;`;
+  const sql = `SELECT * FROM image WHERE INSTR(url, '${params.search}') >  0 LIMIT ${limit} OFFSET ${offset};`;
 
   try {
     const rows = await new Promise((resolve, reject) => {

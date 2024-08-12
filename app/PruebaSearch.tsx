@@ -16,37 +16,56 @@ export default function PruebaSearch() {
   const [results, setResults] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1); // Estado para la paginación
 
   let debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
-    
+
     debounceTimeout.current = setTimeout(() => {
       fetchData();
     }, 300);
-    
+
     function fetchData() {
-      console.log("disparo", searchTerm);
+      console.log("disparo", searchTerm, page);
       try {
-        fetch("/api/prueba/" + searchTerm)
+        fetch(`/api/prueba/${searchTerm}?page=${page}`)
           .then((res) => res.json())
           .then((data) => {
-            setResults(data);
+            //setResults(data);
+            if (page === 1) {
+              setResults(data);
+              console.log(data);
+            } else {
+              // @ts-ignore
+              setResults((prevResults) => [...prevResults, ...data]);
+            }
           });
       } catch (e) {
         console.log(e);
       }
     }
-  }, [searchTerm]);
+  }, [searchTerm, page]);
 
   function handlePruebaSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    setPage(1);
     setSearchTerm(event.target.value);
   }
 
+  const divRef = useRef(null); // Referencia al div
+
+  const handleScroll = () => {
+    const div: HTMLDivElement = divRef.current!;
+    // Calcular si el div ha sido scrolleado hasta el fondo
+
+    if (div.scrollTop + div.clientHeight >= div.scrollHeight) {
+      console.log("Has llegado al final del contenido");
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
   return (
     <div>
       <h2>prueba search</h2>
@@ -56,7 +75,15 @@ export default function PruebaSearch() {
         onChange={handlePruebaSearch}
         value={searchTerm}
       />
-      <div style={{ height: "200px", overflow: "auto" }} className={""}>
+      <div
+        ref={divRef}
+        onScroll={(e) => {
+          //console.log(e);
+          handleScroll();
+        }}
+        style={{ height: "200px", overflow: "auto" }}
+        className={""}
+      >
         {results &&
           results.length > 0 &&
           results.map((img: { id: string; url: string }, index: number) => (
