@@ -18,6 +18,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import AlbumsPlayList from "./AlbumsPlaylist";
 import { AppContextProvider } from "./AppContext";
+import PruebaSearch from "./PruebaSearch";
 
 //TODO: probar cascade layers en lugar de z-index
 
@@ -195,6 +196,7 @@ export default function Home() {
             <AlbumsPlayList />
           </AppContextProvider>
         </div>
+        <PruebaSearch />
       </section>
     </main>
   );
