@@ -56,7 +56,10 @@ export default function PlayerControls({
       <button
         aria-label="stop"
         className={`${styles.playerControl}`}
-        onClick={() => dispatch(stop())}
+        onClick={() => {
+          setShowPlayer(false);
+          dispatch(stop());
+        }}
       >
         <StopIcon className={styles.icon} />
       </button>

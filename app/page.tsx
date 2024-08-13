@@ -12,6 +12,9 @@ import { AppContext } from "./AppContext";
 import AlbumsPlayList from "./AlbumsPlaylist";
 import { AppContextProvider } from "./AppContext";
 import PruebaSearch2 from "./PruebaSearch";
+import SlidesWrapper from "./Slides/SlidesWrapper";
+import { PauseIcon, StopIcon, PlayIcon } from "./PlayerControls/icons";
+import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
 
 //TODO: probar cascade layers en lugar de z-index
 
@@ -30,12 +33,12 @@ export default function Home() {
   const status = useAppSelector(selectStatus);
 
   const [albums, setAlbums] = useState<AlbumType[]>([]);
-  const [showPlayer, setShowPlayer] = useState(true);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  /* const [showPlayer, setShowPlayer] = useState(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null); */
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-  const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
-
+/*   const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
+ */
   const [imagesPlaylist, setImagesPlaylist] = useState<
     { albumId: number; link: string }[]
   >([]);
@@ -110,7 +113,7 @@ export default function Home() {
     }
   }
 
-  function handleMouseMove() {
+ /*  function handleMouseMove() {
     if ((status === "playing" || status === "paused") && !showPlayer) {
       setShowPlayer(true);
     }
@@ -126,7 +129,7 @@ export default function Home() {
         }
       }, 1000);
     }
-  }
+  } */
 
   let statusStyle = {
     paused: styles.playing,
@@ -136,7 +139,7 @@ export default function Home() {
 
   return (
     <main className={`${styles.mainPage}`}>
-      <div
+      {/*    <div
         onMouseMove={handleMouseMove}
         className={`${styles.slidesWrapper} ${statusStyle[status]}`}
       >
@@ -152,19 +155,31 @@ export default function Home() {
             />
           )}
         </div>
-      </div>
+      </div> */}
+      <SlidesWrapper imagesPlaylist={imagesPlaylist} />
+
       <section
         /*  className={`${styles.mainContainer} ${status === "paused" || status === "playing" ? styles.playing: "" }`} */
         className={`${styles.mainContainer} ${statusStyle[status]}`}
       >
-        <div>
-          {showPlayer && (
-            <PlayerControls
+        <div className={`${playerControlsStyles.playerContainer}`}>
+          {/*           {showPlayer && (
+           */}{" "}
+          {/*   <PlayerControls
               setShowPlayer={setShowPlayer}
               key={2}
               setIsMouseOverPlayer={setIsMouseOverPlayer}
-            />
-          )}
+            /> */}
+          {/*  )} */}
+          <button
+            aria-label="play"
+            className={`${playerControlsStyles.playerControl}`}
+            onClick={() => {
+              dispatch(play());
+            }}
+          >
+            <PlayIcon className={playerControlsStyles.icon} />
+          </button>
         </div>
         <div className={`${styles.albumsContainer}${statusStyle[status]}`}>
           <div>
@@ -179,8 +194,8 @@ export default function Home() {
                     <button
                       onClick={(e) => {
                         handlePlayAlbum(e, album);
-                        setShowPlayer(false);
-                        dispatch(play());
+                        /*                         setShowPlayer(false);
+                         */ dispatch(play());
                       }}
                     >
                       Play
