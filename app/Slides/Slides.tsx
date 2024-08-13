@@ -45,6 +45,7 @@ export default function Slides({
   //también podría usar useref?
   // Preload next 3 images
   useEffect(() => {
+    //console.log("currentImage.albumId", currentImage.albumId);
     dispatch(setAlbumId(currentImage.albumId));
     const preloadImages = () => {
       //TODO: ojo, está volviendo a cargar imagenes que ya están cargadas luego de la primera pasada

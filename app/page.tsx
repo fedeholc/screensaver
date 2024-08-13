@@ -37,20 +37,30 @@ export default function Home() {
     { albumId: number; link: string }[]
   >([]);
 
-  //hace una primera carga de imagenes por defecto, previo a que se seleccione un album, pero ojo, está tomando las imagenes de un archivo json, no de la base.
-  //TODO: cambiar para que tome las imagenes de la base de datos de algún album, y que tenga la info completa del album.
-  //sería interesante guardar datos de cantidad de reproducciones de cada album por usuario como para poder mostrar los más populares.
+  //VER sería interesante guardar datos de cantidad de reproducciones de cada album por usuario como para poder mostrar los más populares.
+  //TODO: está tomando un album random para tenerlo cargado por defecto, pero revisar porque al estar react en strict mode, se está llamando 2 veces a la api y hace un cambio de imagenes si tocan 2 random distintos. Habría que hacer un useEffect que se ejecute solo una vez y guarde el random, o ver que pasa cuando no está en strict mode.
   useEffect(() => {
+    async function getData() {
+      let albumId;
+
+      var response = await fetch("/api/randomalbum");
+      let album = await response.json();
+      albumId = album[0].id;
+
+      var response = await fetch("/api/album/" + albumId);
+      let data = await response.json();
+
+      if (data) {
+        let temp = data.map((img: any) => {
+          return { albumId: img.albumId, link: img.url };
+        });
+        setImagesPlaylist(temp);
+      }
+    }
+
     if (imagesPlaylist.length === 0) {
       try {
-        fetch("/api/data")
-          .then((res) => res.json())
-          .then((data) => {
-            let temp = data.map((link: string) => {
-              return { albumId: 1, link: link };
-            });
-            setImagesPlaylist(temp);
-          });
+        getData();
       } catch (e) {
         console.log(e);
       }
@@ -92,9 +102,9 @@ export default function Home() {
 
   async function handlePlayAlbum(
     event: React.MouseEvent<HTMLButtonElement>,
-    album: AlbumType
+    albumId: string
   ) {
-    let response = await fetch("/api/album/" + album.id);
+    let response = await fetch("/api/album/" + albumId);
     let data = await response.json();
 
     if (data) {
@@ -139,7 +149,7 @@ export default function Home() {
                     <button onClick={(e) => handleAdd(e, album)}>Add</button>
                     <button
                       onClick={(e) => {
-                        handlePlayAlbum(e, album);
+                        handlePlayAlbum(e, album.id.toString());
                         dispatch(play());
                       }}
                     >
