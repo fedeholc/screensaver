@@ -1,24 +1,17 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
-import React, {
-  Dispatch,
-  SetStateAction,
-  use,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import React, { useRef, useState } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
 import Slides from "./Slides/Slides";
 import { play, selectStatus } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import PlayerControls from "./PlayerControls/PlayerControls";
 import { AppContext } from "./AppContext";
-import { useContext } from "react";
-import { useEffect } from "react";
 import AlbumsPlayList from "./AlbumsPlaylist";
 import { AppContextProvider } from "./AppContext";
-import PruebaSearch from "./PruebaSearch";
+import PruebaSearch2 from "./PruebaSearch";
 
 //TODO: probar cascade layers en lugar de z-index
 
@@ -47,16 +40,9 @@ export default function Home() {
     { albumId: number; link: string }[]
   >([]);
 
-  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    const search = event.target.value;
-    if (albums.length > 0) {
-      let filtered = albums.filter((album) => {
-        return album.name.toLowerCase().includes(search.toLowerCase());
-      });
-      setFilteredAlbums(filtered);
-    }
-  }
-
+  //hace una primera carga de imagenes por defecto, previo a que se seleccione un album, pero ojo, está tomando las imagenes de un archivo json, no de la base.
+  //TODO: cambiar para que tome las imagenes de la base de datos de algún album, y que tenga la info completa del album.
+  //sería interesante guardar datos de cantidad de reproducciones de cada album por usuario como para poder mostrar los más populares.
   useEffect(() => {
     if (imagesPlaylist.length === 0) {
       try {
@@ -76,6 +62,8 @@ export default function Home() {
     }
   }, [imagesPlaylist]);
 
+  //carga la lista de los albums desde la base de datos
+  //TODO: habría que implementar acá el debounce y paginación cuando haya mas para cargar.
   useEffect(() => {
     if (albums.length === 0) {
       fetch("/api/albums")
@@ -86,6 +74,16 @@ export default function Home() {
         });
     }
   });
+
+  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    const search = event.target.value;
+    if (albums.length > 0) {
+      let filtered = albums.filter((album) => {
+        return album.name.toLowerCase().includes(search.toLowerCase());
+      });
+      setFilteredAlbums(filtered);
+    }
+  }
 
   function handleAdd(
     event: React.MouseEvent<HTMLButtonElement>,
@@ -196,7 +194,7 @@ export default function Home() {
             <AlbumsPlayList />
           </AppContextProvider>
         </div>
-        <PruebaSearch />
+        <PruebaSearch2 />
       </section>
     </main>
   );
