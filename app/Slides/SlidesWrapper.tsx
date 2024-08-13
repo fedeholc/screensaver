@@ -2,16 +2,11 @@
 //eslint-disable @next/next/no-img-element
 import styles from "@/app/page.module.css";
 import React, { useRef, useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
+
 import Slides from "@/app/Slides/Slides";
-import { play, selectStatus } from "@/lib/features/player/playerSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { selectStatus } from "@/lib/features/player/playerSlice";
+import { useAppSelector } from "@/lib/hooks";
 import PlayerControls from "@/app/PlayerControls/PlayerControls";
-import { AppContext } from "@/app/AppContext";
-import AlbumsPlayList from "@/app/AlbumsPlaylist";
-import { AppContextProvider } from "@/app/AppContext";
-import PruebaSearch2 from "@/app/PruebaSearch";
 
 export default function SlidesWrapper({
   imagesPlaylist,

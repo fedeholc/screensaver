@@ -4,16 +4,14 @@ import styles from "./page.module.css";
 import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
-import Slides from "./Slides/Slides";
 import { play, selectStatus } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import PlayerControls from "./PlayerControls/PlayerControls";
 import { AppContext } from "./AppContext";
 import AlbumsPlayList from "./AlbumsPlaylist";
 import { AppContextProvider } from "./AppContext";
 import PruebaSearch2 from "./PruebaSearch";
 import SlidesWrapper from "./Slides/SlidesWrapper";
-import { PauseIcon, StopIcon, PlayIcon } from "./PlayerControls/icons";
+import { PlayIcon } from "./PlayerControls/icons";
 import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
 
 //TODO: probar cascade layers en lugar de z-index
@@ -26,19 +24,15 @@ type AlbumType = {
 };
 
 export default function Home() {
-  const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } =
-    useContext(AppContext);
+  const { albumsPL } = useContext(AppContext);
 
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
 
   const [albums, setAlbums] = useState<AlbumType[]>([]);
-  /* const [showPlayer, setShowPlayer] = useState(true);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null); */
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-/*   const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
- */
+
   const [imagesPlaylist, setImagesPlaylist] = useState<
     { albumId: number; link: string }[]
   >([]);
@@ -94,8 +88,6 @@ export default function Home() {
   ) {
     console.log("add", album);
     albumsPL.add(album);
-    //albumsPlaylistDispatch({ type: "add", payload: album });
-    //setAlbumsPlaylist((prev) => [...prev, album]);
   }
 
   async function handlePlayAlbum(
@@ -113,24 +105,6 @@ export default function Home() {
     }
   }
 
- /*  function handleMouseMove() {
-    if ((status === "playing" || status === "paused") && !showPlayer) {
-      setShowPlayer(true);
-    }
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    if (status !== "stopped") {
-      timeoutRef.current = setTimeout(() => {
-        if (!isMouseOverPlayer) {
-          setShowPlayer(false);
-        }
-      }, 1000);
-    }
-  } */
-
   let statusStyle = {
     paused: styles.playing,
     playing: styles.playing,
@@ -139,38 +113,10 @@ export default function Home() {
 
   return (
     <main className={`${styles.mainPage}`}>
-      {/*    <div
-        onMouseMove={handleMouseMove}
-        className={`${styles.slidesWrapper} ${statusStyle[status]}`}
-      >
-        {imagesPlaylist.length > 0 && (
-          <Slides imageList={imagesPlaylist}></Slides>
-        )}
-        <div className={`${styles.playerControlsWrapper}`}>
-          {showPlayer && status !== "stopped" && (
-            <PlayerControls
-              key={1}
-              setIsMouseOverPlayer={setIsMouseOverPlayer}
-              setShowPlayer={setShowPlayer}
-            />
-          )}
-        </div>
-      </div> */}
       <SlidesWrapper imagesPlaylist={imagesPlaylist} />
 
-      <section
-        /*  className={`${styles.mainContainer} ${status === "paused" || status === "playing" ? styles.playing: "" }`} */
-        className={`${styles.mainContainer} ${statusStyle[status]}`}
-      >
+      <section className={`${styles.mainContainer} ${statusStyle[status]}`}>
         <div className={`${playerControlsStyles.playerContainer}`}>
-          {/*           {showPlayer && (
-           */}{" "}
-          {/*   <PlayerControls
-              setShowPlayer={setShowPlayer}
-              key={2}
-              setIsMouseOverPlayer={setIsMouseOverPlayer}
-            /> */}
-          {/*  )} */}
           <button
             aria-label="play"
             className={`${playerControlsStyles.playerControl}`}
@@ -194,8 +140,7 @@ export default function Home() {
                     <button
                       onClick={(e) => {
                         handlePlayAlbum(e, album);
-                        /*                         setShowPlayer(false);
-                         */ dispatch(play());
+                        dispatch(play());
                       }}
                     >
                       Play
