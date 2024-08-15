@@ -13,10 +13,9 @@ import PruebaSearch2 from "./PruebaSearch";
 import SlidesWrapper from "./Slides/SlidesWrapper";
 import { PlayIcon } from "./PlayerControls/icons";
 import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
-import {Album} from "@/app/types/Album";
+import { Album } from "@/app/types/db/Album";
 
 //TODO: probar cascade layers en lugar de z-index
-
 
 export default function Home() {
   const { albumsPL } = useContext(AppContext);
@@ -87,10 +86,7 @@ export default function Home() {
     }
   }
 
-  function handleAdd(
-    event: React.MouseEvent<HTMLButtonElement>,
-    album: Album
-  ) {
+  function handleAdd(event: React.MouseEvent<HTMLButtonElement>, album: Album) {
     console.log("add", album);
     albumsPL.add(album);
   }

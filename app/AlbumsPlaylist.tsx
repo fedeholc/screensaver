@@ -2,7 +2,7 @@ import styles from "./page.module.css";
 import { AppContext } from "./AppContext";
 import { useContext } from "react";
 import { AppContextProvider } from "./AppContext";
-import { Album } from "./types/Album";
+import { Album } from "./types/db/Album";
 
 export default function AlbumsPlaylist() {
   const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } =

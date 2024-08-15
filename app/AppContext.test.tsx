@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { albumsPlaylistReducer } from "./AppContext";
 import { AplAction } from "./AppContext";
-import { Album } from "./types/Album";
+import { Album } from "./types/db/Album";
 
 const album1 = {
   id: "1",

@@ -1,7 +1,6 @@
 "use client";
 import { createContext, useContext, useReducer } from "react";
 
- 
 export type AplAction =
   | { type: "add"; payload: Album }
   | { type: "remove"; payload: number };
@@ -21,7 +20,7 @@ export function albumsPlaylistReducer(
 }
 
 import { Dispatch } from "react";
-import { Album } from "./types/Album";
+import { Album } from "./types/db/Album";
 
 export const AppContext = createContext<{
   albumsPlaylist: Album[];
