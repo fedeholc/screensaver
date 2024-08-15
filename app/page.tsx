@@ -24,44 +24,41 @@ export default function Home() {
   const status = useAppSelector(selectStatus);
 
   const [albums, setAlbums] = useState<Album[]>([]);
-
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
 
   const [imagesPlaylist, setImagesPlaylist] = useState<
     { albumId: number; link: string }[]
   >([]);
 
-  //VER sería interesante guardar datos de cantidad de reproducciones de cada album por usuario como para poder mostrar los más populares.
-  //TODO: está tomando un album random para tenerlo cargado por defecto, pero revisar porque al estar react en strict mode, se está llamando 2 veces a la api y hace un cambio de imagenes si tocan 2 random distintos. Habría que hacer un useEffect que se ejecute solo una vez y guarde el random, o ver que pasa cuando no está en strict mode.
-  useEffect(() => {
-    async function getData() {
-      let albumId;
+  async function loadRandomAlbum() {
+    let albumId;
 
-      var response = await fetch("/api/randomalbum");
-      let album = await response.json();
-      albumId = album[0].id;
+    var response = await fetch("/api/randomalbum");
+    let album = await response.json();
+    albumId = album[0].id;
 
-      var response = await fetch("/api/album/" + albumId);
-      let data = await response.json();
+    var response = await fetch("/api/album/" + albumId);
+    let data = await response.json();
 
-      if (data) {
-        let temp = data.map((img: any) => {
-          return { albumId: img.albumId, link: img.url };
-        });
-        setImagesPlaylist(temp);
-      }
+    if (data) {
+      let temp = data.map((img: any) => {
+        return { albumId: img.albumId, link: img.url };
+      });
+      setImagesPlaylist(temp);
+      //console.log(data,temp);
+      //setImagesPlaylist(data);
     }
+  }
 
+  useEffect(() => {
     if (imagesPlaylist.length === 0) {
       try {
-        getData();
+        loadRandomAlbum();
       } catch (e) {
         console.log(e);
       }
-    } else if (imagesPlaylist.length > 0) {
-      setImagesPlaylist(imagesPlaylist);
     }
-  }, [imagesPlaylist]);
+  });
 
   //carga la lista de los albums desde la base de datos
   //TODO: habría que implementar acá el debounce y paginación cuando haya mas para cargar.
