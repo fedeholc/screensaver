@@ -26,6 +26,7 @@ export default function Home() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
 
+  //TODO: hay que definir acá el tipo de dato, que sería images como la tabla. pero la tabla tiene albumid, lo cual no sería correcto si pensamos que puede estar en distintos albumes, pero en los aun no tenemos custom playlist... habría que ver si vale la pena armar una nueva tabla que tenga para el album la lista de imagenes. Pero ahora que lo pienso, una cosa es un album al cual si pertenece una imagen y otra cosa es una custom playlist, como sucede con la música. Pensarlo...
   const [imagesPlaylist, setImagesPlaylist] = useState<
     { albumId: number; link: string }[]
   >([]);
@@ -45,6 +46,7 @@ export default function Home() {
         return { albumId: img.albumId, link: img.url };
       });
       setImagesPlaylist(temp);
+
       //console.log(data,temp);
       //setImagesPlaylist(data);
     }
