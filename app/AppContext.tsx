@@ -1,20 +1,15 @@
 "use client";
 import { createContext, useContext, useReducer } from "react";
-export type AlbumType = {
-  id: number;
-  name: string;
-  links?: string[];
-  // otros campos del álbum si existen
-};
 
+ 
 export type AplAction =
-  | { type: "add"; payload: AlbumType }
+  | { type: "add"; payload: Album }
   | { type: "remove"; payload: number };
 
 export function albumsPlaylistReducer(
-  albumsPlaylist: AlbumType[],
+  albumsPlaylist: Album[],
   action: AplAction
-): AlbumType[] {
+): Album[] {
   switch (action.type) {
     case "add":
       return [...albumsPlaylist, action.payload];
@@ -26,12 +21,13 @@ export function albumsPlaylistReducer(
 }
 
 import { Dispatch } from "react";
+import { Album } from "./types/Album";
 
 export const AppContext = createContext<{
-  albumsPlaylist: AlbumType[];
+  albumsPlaylist: Album[];
   albumsPlaylistDispatch: Dispatch<AplAction>;
   albumsPL: {
-    add: (album: AlbumType) => void;
+    add: (album: Album) => void;
     remove: (index: number) => void;
   };
 }>({
@@ -51,7 +47,7 @@ export function AppContextProvider({
   );
 
   const albumsPL = {
-    add: function (album: AlbumType) {
+    add: function (album: Album) {
       albumsPlaylistDispatch({ type: "add", payload: album });
     },
     remove: function (index: number) {

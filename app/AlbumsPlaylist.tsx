@@ -2,12 +2,8 @@ import styles from "./page.module.css";
 import { AppContext } from "./AppContext";
 import { useContext } from "react";
 import { AppContextProvider } from "./AppContext";
-type AlbumType = {
-  id: number;
-  name: string;
-  links?: string[];
-  // otros campos del álbum si existen
-};
+import { Album } from "./types/Album";
+
 export default function AlbumsPlaylist() {
   const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } =
     useContext(AppContext);
@@ -17,7 +13,7 @@ export default function AlbumsPlaylist() {
       <h2>playlist</h2>
       <div className={styles.albumsList}>
         {albumsPlaylist &&
-          albumsPlaylist.map((album: AlbumType, index: number) => (
+          albumsPlaylist.map((album: Album, index: number) => (
             <div
               className={styles.albumsItem}
               key={album.id + index.toString()}

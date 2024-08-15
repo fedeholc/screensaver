@@ -1,0 +1,24 @@
+export { AuthorFields, AuthorSchema };
+export type { Author };
+import { z } from 'zod';
+
+const AuthorSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  image: z.string(),
+});
+
+enum AuthorFields {
+  id = "id",
+  name = "name",
+  description = "description",
+  image = "image",
+}
+
+type Author = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+};

@@ -3,12 +3,7 @@ import { AppContext } from "./AppContext";
 import { use, useContext } from "react";
 import { AppContextProvider } from "./AppContext";
 import { useState, useEffect, useRef } from "react";
-type AlbumType = {
-  id: number;
-  name: string;
-  links?: string[];
-  // otros campos del álbum si existen
-};
+
 export default function PruebaSearch2() {
   const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } =
     useContext(AppContext);

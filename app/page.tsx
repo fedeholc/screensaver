@@ -13,15 +13,10 @@ import PruebaSearch2 from "./PruebaSearch";
 import SlidesWrapper from "./Slides/SlidesWrapper";
 import { PlayIcon } from "./PlayerControls/icons";
 import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
+import {Album} from "@/app/types/Album";
 
 //TODO: probar cascade layers en lugar de z-index
 
-type AlbumType = {
-  id: number;
-  name: string;
-  links?: string[];
-  // otros campos del álbum si existen
-};
 
 export default function Home() {
   const { albumsPL } = useContext(AppContext);
@@ -29,7 +24,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
 
-  const [albums, setAlbums] = useState<AlbumType[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
 
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
 
@@ -94,7 +89,7 @@ export default function Home() {
 
   function handleAdd(
     event: React.MouseEvent<HTMLButtonElement>,
-    album: AlbumType
+    album: Album
   ) {
     console.log("add", album);
     albumsPL.add(album);
