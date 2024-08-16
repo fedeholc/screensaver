@@ -48,7 +48,6 @@ export default function AlbumsList({
 
   return (
     <div className={`${styles.albumsContainer}${statusStyle[status]}`}>
-
       <input
         className={styles.albumsSearch}
         type="text"
@@ -58,16 +57,20 @@ export default function AlbumsList({
       <div className={styles.albumsList}>
         {filteredAlbums.map((album) => (
           <div className={styles.albumsItem} key={album.id}>
-            {album.name}
-            <button onClick={(e) => albumsPL.add(album)}>Add</button>
-            <button
-              onClick={(e) => {
-                handlePlayAlbum(e, album.id.toString());
-                dispatch(play());
-              }}
-            >
-              Play
-            </button>
+            <div>{album.name}</div>
+            <div>
+              {/*TODO: para implementar  */}
+              {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
+              <button
+                className={styles.albumsItemButton}
+                onClick={(e) => {
+                  handlePlayAlbum(e, album.id.toString());
+                  dispatch(play());
+                }}
+              >
+                Play
+              </button>
+            </div>
           </div>
         ))}
       </div>
