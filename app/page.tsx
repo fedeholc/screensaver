@@ -123,11 +123,11 @@ export default function Home() {
               </div>
             </AppContextProvider>
           </div>
-          <AppContextProvider>
-            <AlbumsPlayList />
-          </AppContextProvider>
+          {/*  <AppContextProvider>
+             VER  para implementar luego <AlbumsPlayList /> 
+          </AppContextProvider>*/}
         </div>
-        <PruebaSearch2 />
+        {/* VER este era una prueba de search con debounce, funciona, para aplicar luego al search de albums, etc. <PruebaSearch2 /> */}
       </section>
     </main>
   );
