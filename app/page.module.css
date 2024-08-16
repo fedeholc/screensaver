@@ -10,7 +10,8 @@
 }
 
 .mainContainer {
-  z-index: var(--ZI_mainContainer_stopped)
+  z-index: var(--ZI_mainContainer_stopped);
+  padding: 1rem;
 }
 
 .mainContainer.playing {
@@ -27,23 +28,44 @@
 .albumsContainer {
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 1rem;
+  /*   background: rgba(0, 0, 0, 0.8);
+ */
+  /* border: 2px solid gray; */
+  /*  padding: 1rem;
+  border-radius: 15px; */
 }
 
 .albumsList {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   overflow: auto;
   max-height: 400px;
-  border: 1px solid white;
+  padding: 1rem;
 
+  /*   border: 1px solid white;
+ */
   .albumsItem {
-    border: 1px solid red;
+    padding: 0.7rem;
+    background-color: rgba(24, 24, 24, 0.9);
+    outline: 1px solid gray;
   }
 }
 
+.albumsSearch {
+  margin: 1rem;
+  font-size: 1.5rem;
+  padding: 0.7rem;
+  border: none;
+  color: var(--color17);
+  background-color: var(--color1);
+  border-bottom: 2px solid var(--color17);
+  transition: all ease-in-out 0.1s;
+}
+
+.albumsSearch:focus {
+  border-bottom: 2px solid var(--color1);
+  outline: 2px solid var(--color17);
+}
 
 .slidesWrapper {
   display: flex;

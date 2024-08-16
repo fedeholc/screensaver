@@ -48,8 +48,13 @@ export default function AlbumsList({
 
   return (
     <div className={`${styles.albumsContainer}${statusStyle[status]}`}>
-      <h2>albums</h2>
-      <input type="text" placeholder="Search" onChange={handleSearch} />
+
+      <input
+        className={styles.albumsSearch}
+        type="text"
+        placeholder="Search albums..."
+        onChange={handleSearch}
+      />
       <div className={styles.albumsList}>
         {filteredAlbums.map((album) => (
           <div className={styles.albumsItem} key={album.id}>
