@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { play, selectStatus } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { AppContext } from "./AppContext";
-import AlbumsPlayList from "./AlbumsPlaylist";
+import NewPlayList from "./NewPlaylist";
 import { AppContextProvider } from "./AppContext";
 import PruebaSearch2 from "./PruebaSearch2";
 import SlidesWrapper from "./Slides/SlidesWrapper";
@@ -16,11 +16,11 @@ import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
 import type { Album } from "@/app/types/db/Album";
 import type { Image } from "@/app/types/db/Image";
 import { getAlbumImages, getRandomAlbum } from "@/lib/apiService";
+import AlbumsList from "./AlbumsList";
 
 //TODO: probar cascade layers en lugar de z-index
 
 export default function Home() {
-  const { albumsPL } = useContext(AppContext);
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -56,28 +56,6 @@ export default function Home() {
     }
   });
 
-  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    const search = event.target.value;
-    if (albums.length > 0) {
-      let filtered = albums.filter((album) => {
-        return album.name.toLowerCase().includes(search.toLowerCase());
-      });
-      setFilteredAlbums(filtered);
-    }
-  }
-
-  function handleAdd(event: React.MouseEvent<HTMLButtonElement>, album: Album) {
-    albumsPL.add(album);
-  }
-
-  async function handlePlayAlbum(
-    event: React.MouseEvent<HTMLButtonElement>,
-    albumId: string
-  ) {
-    let Images = await getAlbumImages(albumId);
-    setMainPL(Images);
-  }
-
   let statusStyle = {
     paused: styles.playing,
     playing: styles.playing,
@@ -100,33 +78,18 @@ export default function Home() {
             <PlayIcon className={playerControlsStyles.icon} />
           </button>
         </div>
-        <div className={`${styles.albumsContainer}${statusStyle[status]}`}>
-          <div>
-            <h2>albums</h2>
-            <input type="text" placeholder="Search" onChange={handleSearch} />
-            <AppContextProvider>
-              <div className={styles.albumsList}>
-                {filteredAlbums.map((album) => (
-                  <div className={styles.albumsItem} key={album.id}>
-                    {album.name}
-                    <button onClick={(e) => handleAdd(e, album)}>Add</button>
-                    <button
-                      onClick={(e) => {
-                        handlePlayAlbum(e, album.id.toString());
-                        dispatch(play());
-                      }}
-                    >
-                      Play
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </AppContextProvider>
-          </div>
-          {/*  <AppContextProvider>
-             VER  para implementar luego <AlbumsPlayList /> 
+        <AppContextProvider>
+          <AlbumsList
+            albums={albums}
+            filteredAlbums={filteredAlbums}
+            setFilteredAlbums={setFilteredAlbums}
+            setMainPL={setMainPL}
+          />
+        </AppContextProvider>
+        {/*  <AppContextProvider>
+             VER  para implementar luego <NewPlayList /> 
           </AppContextProvider>*/}
-        </div>
+
         {/* VER este era una prueba de search con debounce, funciona, para aplicar luego al search de albums, etc. <PruebaSearch2 /> */}
       </section>
     </main>

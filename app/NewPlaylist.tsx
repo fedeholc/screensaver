@@ -3,7 +3,7 @@ import { AppContext } from "./AppContext";
 import { useContext } from "react";
 import type { Album } from "./types/db/Album";
 
-export default function AlbumsPlaylist() {
+export default function NewPlaylist() {
   const { albumsPlaylist, albumsPlaylistDispatch, albumsPL } =
     useContext(AppContext);
 
