@@ -11,7 +11,7 @@ enum ImageFields {
 }
 
 type Image = {
-  id: number;
+  id: string;
   url: string;
   description: string;
   source: string;

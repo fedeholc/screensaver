@@ -13,7 +13,8 @@ import PruebaSearch2 from "./PruebaSearch";
 import SlidesWrapper from "./Slides/SlidesWrapper";
 import { PlayIcon } from "./PlayerControls/icons";
 import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
-import { Album } from "@/app/types/db/Album";
+import type { Album } from "@/app/types/db/Album";
+import type { Image } from "@/app/types/db/Image";
 
 //TODO: probar cascade layers en lugar de z-index
 
@@ -27,9 +28,7 @@ export default function Home() {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
 
   //TODO: hay que definir acá el tipo de dato, que sería images como la tabla. pero la tabla tiene albumid, lo cual no sería correcto si pensamos que puede estar en distintos albumes, pero en los aun no tenemos custom playlist... habría que ver si vale la pena armar una nueva tabla que tenga para el album la lista de imagenes. Pero ahora que lo pienso, una cosa es un album al cual si pertenece una imagen y otra cosa es una custom playlist, como sucede con la música. Pensarlo...
-  const [imagesPlaylist, setImagesPlaylist] = useState<
-    { albumId: number; link: string }[]
-  >([]);
+  const [imagesPlaylist, setImagesPlaylist] = useState<Image[]>([]);
 
   async function loadRandomAlbum() {
     let albumId;
@@ -39,16 +38,10 @@ export default function Home() {
     albumId = album[0].id;
 
     var response = await fetch("/api/album/" + albumId);
-    let data = await response.json();
+    let data: Image[] = await response.json();
 
     if (data) {
-      let temp = data.map((img: any) => {
-        return { albumId: img.albumId, link: img.url };
-      });
-      setImagesPlaylist(temp);
-
-      //console.log(data,temp);
-      //setImagesPlaylist(data);
+      setImagesPlaylist(data);
     }
   }
 
@@ -86,7 +79,6 @@ export default function Home() {
   }
 
   function handleAdd(event: React.MouseEvent<HTMLButtonElement>, album: Album) {
-    console.log("add", album);
     albumsPL.add(album);
   }
 
@@ -95,13 +87,10 @@ export default function Home() {
     albumId: string
   ) {
     let response = await fetch("/api/album/" + albumId);
-    let data = await response.json();
+    let data: Image[] = await response.json();
 
     if (data) {
-      let temp = data.map((img: any) => {
-        return { albumId: img.albumId, link: img.url };
-      });
-      setImagesPlaylist(temp);
+      setImagesPlaylist(data);
     }
   }
 

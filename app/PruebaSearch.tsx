@@ -1,7 +1,6 @@
 import styles from "./page.module.css";
 import { AppContext } from "./AppContext";
 import { use, useContext } from "react";
-import { AppContextProvider } from "./AppContext";
 import { useState, useEffect, useRef } from "react";
 
 export default function PruebaSearch() {

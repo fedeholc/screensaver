@@ -4,12 +4,12 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { fetchPlayer } from "./playerAPI";
 
 export interface PlayerSliceState {
-  albumId: number;
+  albumId: string;
   status: "playing" | "paused" | "stopped";
 }
 
 const initialState: PlayerSliceState = {
-  albumId: 0,
+  albumId: "",
   status: "stopped",
 };
 
@@ -33,7 +33,7 @@ export const playerSlice = createAppSlice({
     stop: create.reducer((state) => {
       state.status = 'stopped';
     }),
-    setAlbumId: create.reducer((state, action: PayloadAction<number>) => {
+    setAlbumId: create.reducer((state, action: PayloadAction<string>) => {
       state.albumId = action.payload;
     }),
   }),

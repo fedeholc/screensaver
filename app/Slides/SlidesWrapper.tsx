@@ -7,11 +7,12 @@ import Slides from "@/app/Slides/Slides";
 import { selectStatus } from "@/lib/features/player/playerSlice";
 import { useAppSelector } from "@/lib/hooks";
 import PlayerControls from "@/app/PlayerControls/PlayerControls";
+import type { Image } from "@/app/types/db/Image";
 
 export default function SlidesWrapper({
   imagesPlaylist,
 }: {
-  imagesPlaylist: { albumId: number; link: string }[];
+  imagesPlaylist: Image[];
 }) {
   const [showPlayer, setShowPlayer] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);

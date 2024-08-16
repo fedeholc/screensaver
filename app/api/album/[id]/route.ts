@@ -2,7 +2,7 @@
 import sqlite3 from "sqlite3";
 import fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
-
+import { Image } from "@/app/types/db/Image";
 export const dynamic = 'force-static'
 
 
@@ -14,15 +14,16 @@ export async function GET(
   const sql = `SELECT image.id, image.url, image.description, image.source, image.albumId, image.authorId from image INNER join album on image.albumId = album.id WHERE album.id = "${params.id}";`;
   console.log(params);
   try {
-    const rows = await new Promise((resolve, reject) => {
+    const rows: Image[] = await new Promise<Image[]>((resolve, reject) => {
       db.all(sql, [], (error, rows) => {
         if (error) {
           reject(error);
         } else {
-          resolve(rows);
+          resolve(rows as Image[]);
         }
       });
     });
+    //TODO: habría que validar con zod que las rows sean del tipo Image?
 
     return Response.json(rows);
   } catch (error) {

@@ -13,12 +13,9 @@ import {
   selectStatus,
 } from "@/lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import type { Image } from "@/app/types/db/Image";
 
-export default function Slides({
-  imageList,
-}: {
-  imageList: { albumId: number; link: string }[];
-}) {
+export default function Slides({ imageList }: { imageList: Image[] }) {
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
 
@@ -45,14 +42,13 @@ export default function Slides({
   //también podría usar useref?
   // Preload next 3 images
   useEffect(() => {
-    //console.log("currentImage.albumId", currentImage.albumId);
     dispatch(setAlbumId(currentImage.albumId));
     const preloadImages = () => {
       //TODO: ojo, está volviendo a cargar imagenes que ya están cargadas luego de la primera pasada
       for (let i = 1; i <= 3; i++) {
         const nextIndex = (currentImageIndex + i) % images.length;
         const img = new Image();
-        img.src = images[nextIndex].link;
+        img.src = images[nextIndex].url;
       }
     };
     preloadImages();
@@ -60,7 +56,7 @@ export default function Slides({
 
   return (
     <div
-      style={{ backgroundImage: `url(${currentImage.link})` }}
+      style={{ backgroundImage: `url(${currentImage.url})` }}
       className={`${styles.slides} ${
         status === "playing" || status === "paused" ? styles.playing : ""
       }`}
