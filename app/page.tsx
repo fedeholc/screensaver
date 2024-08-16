@@ -28,25 +28,29 @@ export default function Home() {
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
 
   //TODO: hay que definir acá el tipo de dato, que sería images como la tabla. pero la tabla tiene albumid, lo cual no sería correcto si pensamos que puede estar en distintos albumes, pero en los aun no tenemos custom playlist... habría que ver si vale la pena armar una nueva tabla que tenga para el album la lista de imagenes. Pero ahora que lo pienso, una cosa es un album al cual si pertenece una imagen y otra cosa es una custom playlist, como sucede con la música. Pensarlo...
-  const [imagesPlaylist, setImagesPlaylist] = useState<Image[]>([]);
+  const [mainPL, setMainPL] = useState<Image[]>([]);
 
   async function loadRandomAlbum() {
-    let albumId;
+    try {
+      var response = await fetch("/api/randomalbum");
+      let album = await response.json();
 
-    var response = await fetch("/api/randomalbum");
-    let album = await response.json();
-    albumId = album[0].id;
+      var response = await fetch("/api/album/" + album[0].id);
+      let Images: Image[] = await response.json();
 
-    var response = await fetch("/api/album/" + albumId);
-    let data: Image[] = await response.json();
-
-    if (data) {
-      setImagesPlaylist(data);
+      if (Images.length > 0) {
+        setMainPL(Images);
+      } else {
+        setMainPL([]); //TODO: debería hacer que busque otro album si no encuentra imagenes?
+        console.error("No images found for album " + album[0].id);
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 
   useEffect(() => {
-    if (imagesPlaylist.length === 0) {
+    if (mainPL.length === 0) {
       try {
         loadRandomAlbum();
       } catch (e) {
@@ -90,7 +94,7 @@ export default function Home() {
     let data: Image[] = await response.json();
 
     if (data) {
-      setImagesPlaylist(data);
+      setMainPL(data);
     }
   }
 
@@ -102,7 +106,7 @@ export default function Home() {
 
   return (
     <main className={`${styles.mainPage}`}>
-      <SlidesWrapper imagesPlaylist={imagesPlaylist} />
+      <SlidesWrapper imagesPlaylist={mainPL} />
 
       <section className={`${styles.mainContainer} ${statusStyle[status]}`}>
         <div className={`${playerControlsStyles.playerContainer}`}>
