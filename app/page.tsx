@@ -30,32 +30,41 @@ export default function Home() {
   //TODO: hay que definir acá el tipo de dato, que sería images como la tabla. pero la tabla tiene albumid, lo cual no sería correcto si pensamos que puede estar en distintos albumes, pero en los aun no tenemos custom playlist... habría que ver si vale la pena armar una nueva tabla que tenga para el album la lista de imagenes. Pero ahora que lo pienso, una cosa es un album al cual si pertenece una imagen y otra cosa es una custom playlist, como sucede con la música. Pensarlo...
   const [mainPL, setMainPL] = useState<Image[]>([]);
 
-  async function loadRandomAlbum() {
-    try {
-      var response = await fetch("/api/randomalbum");
-      let album = await response.json();
+  async function getRandomAlbum(): Promise<Image[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        var response = await fetch("/api/randomalbum");
+        let album = await response.json();
 
-      var response = await fetch("/api/album/" + album[0].id);
-      let Images: Image[] = await response.json();
+        var response = await fetch("/api/album/" + album[0].id);
+        let Images: Image[] = await response.json();
 
-      if (Images.length > 0) {
-        setMainPL(Images);
-      } else {
-        setMainPL([]); //TODO: debería hacer que busque otro album si no encuentra imagenes?
-        console.error("No images found for album " + album[0].id);
+        if (Images.length > 0) {
+          resolve(Images);
+        } else {
+          //TODO: debería probar cargar otro album?
+          reject(new Error("No images found for album " + album[0].id));
+        }
+      } catch (e) {
+        console.error(e);
+        reject(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
+    });
   }
 
   useEffect(() => {
-    if (mainPL.length === 0) {
+    async function loadRandomAlbum() {
       try {
-        loadRandomAlbum();
-      } catch (e) {
-        console.log(e);
+        let album = await getRandomAlbum();
+        setMainPL(album);
+      } catch (error) {
+        console.error("Error loading random album:", error);
+        setMainPL([]);
       }
+    }
+
+    if (mainPL.length === 0) {
+      loadRandomAlbum();
     }
   });
 
