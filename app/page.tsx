@@ -9,48 +9,23 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { AppContext } from "./AppContext";
 import AlbumsPlayList from "./AlbumsPlaylist";
 import { AppContextProvider } from "./AppContext";
-import PruebaSearch2 from "./PruebaSearch";
+import PruebaSearch2 from "./PruebaSearch2";
 import SlidesWrapper from "./Slides/SlidesWrapper";
 import { PlayIcon } from "./PlayerControls/icons";
 import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
 import type { Album } from "@/app/types/db/Album";
 import type { Image } from "@/app/types/db/Image";
+import { getAlbumImages, getRandomAlbum } from "@/lib/apiService";
 
 //TODO: probar cascade layers en lugar de z-index
 
 export default function Home() {
   const { albumsPL } = useContext(AppContext);
-
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
-
   const [albums, setAlbums] = useState<Album[]>([]);
   const [filteredAlbums, setFilteredAlbums] = useState(albums);
-
-  //TODO: hay que definir acá el tipo de dato, que sería images como la tabla. pero la tabla tiene albumid, lo cual no sería correcto si pensamos que puede estar en distintos albumes, pero en los aun no tenemos custom playlist... habría que ver si vale la pena armar una nueva tabla que tenga para el album la lista de imagenes. Pero ahora que lo pienso, una cosa es un album al cual si pertenece una imagen y otra cosa es una custom playlist, como sucede con la música. Pensarlo...
   const [mainPL, setMainPL] = useState<Image[]>([]);
-
-  async function getRandomAlbum(): Promise<Image[]> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        var response = await fetch("/api/randomalbum");
-        let album = await response.json();
-
-        var response = await fetch("/api/album/" + album[0].id);
-        let Images: Image[] = await response.json();
-
-        if (Images.length > 0) {
-          resolve(Images);
-        } else {
-          //TODO: debería probar cargar otro album?
-          reject(new Error("No images found for album " + album[0].id));
-        }
-      } catch (e) {
-        console.error(e);
-        reject(e);
-      }
-    });
-  }
 
   useEffect(() => {
     async function loadRandomAlbum() {
@@ -99,12 +74,8 @@ export default function Home() {
     event: React.MouseEvent<HTMLButtonElement>,
     albumId: string
   ) {
-    let response = await fetch("/api/album/" + albumId);
-    let data: Image[] = await response.json();
-
-    if (data) {
-      setMainPL(data);
-    }
+    let Images = await getAlbumImages(albumId);
+    setMainPL(Images);
   }
 
   let statusStyle = {

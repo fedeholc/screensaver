@@ -23,7 +23,7 @@ export async function GET(
         }
       });
     });
-
+    console.log("rows", rows);
     return Response.json(rows);
   } catch (error) {
     console.error(error);
