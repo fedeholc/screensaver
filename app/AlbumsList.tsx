@@ -57,26 +57,35 @@ export default function AlbumsList({
       />
       <div className={styles.albumsList}>
         {filteredAlbums.map((album) => (
-          <div className={styles.albumsItem} key={album.id}>
-            <img
-              className={styles.albumsItemImg}
-              src={album.image}
-              alt={album.name}
-            />
-            <div className={styles.albumsItemInfo}>{album.name}</div>
-            <div className={styles.albumsItemControls}>
-              {/*TODO: para implementar  */}
-              {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
-              <button
-                className={styles.albumsItemButton}
-                onClick={(e) => {
-                  handlePlayAlbum(e, album.id.toString());
-                  dispatch(play());
-                }}
-              >
-                Play
-              </button>
+          <div key={album.id}>
+            <div
+              style={{
+                background: `url("${album.image}")`,
+                backgroundRepeat: "round",
+                height: "200px",
+              }}
+              className={styles.albumsItem}
+            >
+              {/* <img
+                className={styles.albumsItemImg}
+                src={album.image}
+                alt={album.name}
+              /> */}
+              <div className={styles.albumsItemControls}>
+                {/*TODO: para implementar  */}
+                {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
+                <button
+                  className={styles.albumsItemButton}
+                  onClick={(e) => {
+                    handlePlayAlbum(e, album.id.toString());
+                    dispatch(play());
+                  }}
+                >
+                  Play
+                </button>
+              </div>
             </div>
+            <div className={styles.albumsItemInfo}>{album.name}</div>
           </div>
         ))}
       </div>
