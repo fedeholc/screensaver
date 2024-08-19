@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { play, selectStatus } from "@/lib/features/player/playerSlice";
@@ -57,8 +58,13 @@ export default function AlbumsList({
       <div className={styles.albumsList}>
         {filteredAlbums.map((album) => (
           <div className={styles.albumsItem} key={album.id}>
-            <div>{album.name}</div>
-            <div>
+            <img
+              className={styles.albumsItemImg}
+              src={album.image}
+              alt={album.name}
+            />
+            <div className={styles.albumsItemInfo}>{album.name}</div>
+            <div className={styles.albumsItemControls}>
               {/*TODO: para implementar  */}
               {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
               <button
