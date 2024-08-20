@@ -59,7 +59,7 @@ export default function AlbumsList({
       />
       <div className={albumsList.albumsList}>
         {filteredAlbums.map((album) => (
-          <div key={albumsList.id} className={albumsList.albumsItem}>
+          <div key={album.id} className={albumsList.albumsItem}>
             <img
               className={albumsList.albumsItemImg}
               src={album.image}

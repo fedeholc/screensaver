@@ -58,9 +58,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  hyphens: auto;
-  word-break: break-word;
-  text-overflow: clip;
 }
 
 .albumsItemControls {
