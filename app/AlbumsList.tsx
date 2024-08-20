@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
+import albumsList from "./albumsList.module.css";
+
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { play, selectStatus } from "@/lib/features/player/playerSlice";
 import { useContext } from "react";
@@ -48,37 +50,36 @@ export default function AlbumsList({
   };
 
   return (
-    <div className={`${styles.albumsContainer}${statusStyle[status]}`}>
+    <div className={`${albumsList.albumsContainer}${statusStyle[status]}`}>
       <input
-        className={styles.albumsSearch}
+        className={albumsList.albumsSearch}
         type="text"
         placeholder="Search albums..."
         onChange={handleSearch}
       />
-      <div className={styles.albumsList}>
+      <div className={albumsList.albumsList}>
         {filteredAlbums.map((album) => (
-          <div key={album.id} className={styles.albumsItem}>
+          <div key={albumsList.id} className={albumsList.albumsItem}>
             <img
-              className={styles.albumsItemImg}
+              className={albumsList.albumsItemImg}
               src={album.image}
               alt={album.name}
             />
-            <div className={styles.albumsItemInfo}>{album.name}</div>
+            <div className={albumsList.albumsItemInfo}>{album.name}</div>
 
-            <div className={styles.albumsItemControls}>
+            <div className={albumsList.albumsItemControls}>
               {/*TODO: para implementar  */}
               {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
-              
+
               <button
-                className={styles.albumsItemButton}
-                 onClick={(e) => {
+                className={albumsList.albumsItemButton}
+                onClick={(e) => {
                   handlePlayAlbum(e, album.id.toString());
                   dispatch(play());
                 }}
               >
                 Play
               </button>
-              
             </div>
           </div>
         ))}
