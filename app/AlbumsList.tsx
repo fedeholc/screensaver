@@ -51,40 +51,42 @@ export default function AlbumsList({
 
   return (
     <div className={`${albumsList.albumsContainer}${statusStyle[status]}`}>
-      <input
-        className={albumsList.albumsSearch}
-        type="text"
-        placeholder="Search albums..."
-        onChange={handleSearch}
-      />
-      <div className={albumsList.albumsList}>
-        {filteredAlbums.map((album) => (
-          <div key={album.id} className={albumsList.albumsItem}>
-            <div className={albumsList.albumsItemImgContainer}>
-              <img
-                className={albumsList.albumsItemImg}
-                src={album.image}
-                alt={album.name}
-              />
+      <div className={albumsList.albumsSearchContainer}>
+        <input
+          className={albumsList.albumsSearch}
+          type="text"
+          placeholder="Search albums..."
+          onChange={handleSearch}
+        />
+      </div>
+      <div className={albumsList.albumsListContainer}>
+        <div className={albumsList.albumsList}>
+          {filteredAlbums.map((album) => (
+            <div key={album.id} className={albumsList.albumsItem}>
+              <div className={albumsList.albumsItemImgContainer}>
+                <img
+                  className={albumsList.albumsItemImg}
+                  src={album.image}
+                  alt={album.name}
+                />
+              </div>
+              <div className={albumsList.albumsItemInfo}>{album.name}</div>
+              <div className={albumsList.albumsItemControls}>
+                {/*TODO: para implementar  */}
+                {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
+                <button
+                  className={albumsList.albumsItemButton}
+                  onClick={(e) => {
+                    handlePlayAlbum(e, album.id.toString());
+                    dispatch(play());
+                  }}
+                >
+                  Play
+                </button>
+              </div>
             </div>
-            <div className={albumsList.albumsItemInfo}>{album.name}</div>
-
-            <div className={albumsList.albumsItemControls}>
-              {/*TODO: para implementar  */}
-              {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
-
-              <button
-                className={albumsList.albumsItemButton}
-                onClick={(e) => {
-                  handlePlayAlbum(e, album.id.toString());
-                  dispatch(play());
-                }}
-              >
-                Play
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       {/*  <AppContextProvider>
              VER  para implementar luego <AlbumsPlayList /> 
