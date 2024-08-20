@@ -27,7 +27,7 @@
   /* padding: 0.7rem; */
   /*   background-color: rgba(24, 24, 24, 0.8);
  */
-  outline: 2px solid black;
+  outline: 2px solid rgba(0, 0, 0, 1);
   display: grid;
   grid-template-columns: 100px 1fr;
   border-radius: 5px;
@@ -37,7 +37,7 @@
 .albumsItem:hover .albumsItemControls {
   display: flex;
   position: absolute;
-  outline: 2px solid gray;
+  outline: 2px solid rgba(128, 128, 128, 0.3);
   background-color: rgba(24, 24, 24, 0.6);
 }
 
@@ -59,8 +59,8 @@
 
 .albumsItemImgContainer {
   overflow: hidden;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .albumsItemInfo {
