@@ -60,11 +60,13 @@ export default function AlbumsList({
       <div className={albumsList.albumsList}>
         {filteredAlbums.map((album) => (
           <div key={album.id} className={albumsList.albumsItem}>
-            <img
-              className={albumsList.albumsItemImg}
-              src={album.image}
-              alt={album.name}
-            />
+            <div className={albumsList.albumsItemImgContainer}>
+              <img
+                className={albumsList.albumsItemImg}
+                src={album.image}
+                alt={album.name}
+              />
+            </div>
             <div className={albumsList.albumsItemInfo}>{album.name}</div>
 
             <div className={albumsList.albumsItemControls}>
