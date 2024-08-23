@@ -92,7 +92,6 @@
 }
 
 .albumsItemButton {
-  display: flex;
   cursor: pointer;
   background-color: var(--color1);
   font-weight: 600;
