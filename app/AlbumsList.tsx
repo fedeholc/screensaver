@@ -8,6 +8,8 @@ import { useContext } from "react";
 import { AppContext } from "./AppContext";
 import { getAlbumImages } from "@/lib/apiService";
 import type { Image } from "@/app/types/db/Image";
+import { PlayIcon } from "@/app/PlayerControls/icons";
+import player from "@/app/PlayerControls/PlayerControls.module.css";
 
 import { Album } from "@/app/types/db/Album";
 
@@ -79,7 +81,7 @@ export default function AlbumsList({
                       dispatch(play());
                     }}
                   >
-                    Play
+                    <PlayIcon className={player.iconSmall} />
                   </button>
                 </div>
               </div>
