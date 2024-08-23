@@ -36,7 +36,16 @@
   border-radius: 5px;
 }
 
+.albumsItem:hover {
 
+  outline: 2px solid var(--color12b);
+  cursor: default
+ }
+
+ .albumsItem:hover .albumsItemInfo{
+
+   background-color: var(--color12c);
+ }
 
 
 .albumsItemImg {
