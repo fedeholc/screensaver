@@ -26,31 +26,23 @@
 
 .albumsItem {
   width: 300px;
-  height: 100px;
+  height: 75px;
   /* padding: 0.7rem; */
   /*   background-color: rgba(24, 24, 24, 0.8);
  */
   outline: 2px solid rgba(0, 0, 0, 1);
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 75px 1fr;
   border-radius: 5px;
 }
 
 
-.albumsItem:hover .albumsItemControls {
-  display: flex;
-  position: absolute;
-  outline: 2px solid rgba(128, 128, 128, 0.3);
-  background-color: rgba(24, 24, 24, 0.6);
-}
 
-.albumsItem:hover .albumsItemButton {
-  display: flex;
-}
 
 .albumsItemImg {
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
+  /* TODO: poner variable */
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   object-fit: cover;
@@ -64,6 +56,7 @@
   overflow: hidden;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+  position: relative;
 }
 
 .albumsItemInfo {
@@ -79,20 +72,18 @@
 }
 
 .albumsItemControls {
-  display: none;
-  place-content: center;
-  place-items: center;
+
+  border-radius: 5px;
+
   position: absolute;
-  height: 100px;
-  width: inherit;
-  /*   background-color: rgba(24, 24, 24, 0.5);
- */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border-radius: 5px;
 }
 
 .albumsItemButton {
   cursor: pointer;
-  display: none;
   background-color: var(--color1);
   font-weight: 600;
   color: var(--color26);

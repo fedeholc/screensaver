@@ -69,21 +69,21 @@ export default function AlbumsList({
                   src={album.image}
                   alt={album.name}
                 />
+                <div className={albumsList.albumsItemControls}>
+                  {/*TODO: para implementar  */}
+                  {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
+                  <button
+                    className={albumsList.albumsItemButton}
+                    onClick={(e) => {
+                      handlePlayAlbum(e, album.id.toString());
+                      dispatch(play());
+                    }}
+                  >
+                    Play
+                  </button>
+                </div>
               </div>
               <div className={albumsList.albumsItemInfo}>{album.name}</div>
-              <div className={albumsList.albumsItemControls}>
-                {/*TODO: para implementar  */}
-                {/* <button onClick={(e) => albumsPL.add(album)}>Add</button> */}
-                <button
-                  className={albumsList.albumsItemButton}
-                  onClick={(e) => {
-                    handlePlayAlbum(e, album.id.toString());
-                    dispatch(play());
-                  }}
-                >
-                  Play
-                </button>
-              </div>
             </div>
           ))}
         </div>
