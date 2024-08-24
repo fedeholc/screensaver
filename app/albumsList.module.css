@@ -5,7 +5,7 @@
   max-width: 1000px;
 }
 
-.albumListContainer {
+.albumsListContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
