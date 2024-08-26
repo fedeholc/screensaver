@@ -11,12 +11,13 @@
 
 .mainContainer {
   z-index: var(--ZI_mainContainer_stopped);
-  padding: 1rem;
+  padding: 4rem 1rem 1rem 1rem;
   display: grid;
   grid-template-rows: 150px 1fr;
   height: 100vh;
-  align-items: center;
+  align-items: start;
   justify-items: center;
+  width: 100vw;
 }
 
 .mainContainer.playing {
