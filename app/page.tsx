@@ -63,39 +63,33 @@ export default function Home() {
 
   return (
     <main className={`${styles.mainPage}`}>
-      <Suspense fallback={<h1>Loading slides...</h1>}>
-        <SlidesWrapper imagesPlaylist={mainPL} />
-      </Suspense>
-      <Suspense fallback={<h1>Loading ...</h1>}>
-        <section className={`${styles.mainContainer} ${statusStyle[status]}`}>
-          <div className={`${playerControlsStyles.playerContainer}`}>
-            <button
-              aria-label="play"
-              className={`${playerControlsStyles.playerControl}`}
-              onClick={() => {
-                dispatch(play());
-              }}
-            >
-              <PlayIcon className={playerControlsStyles.icon} />
-            </button>
-          </div>
-          <Suspense fallback={<h1>Loading slides...</h1>}>
-            <AppContextProvider>
-              <AlbumsList
-                albums={albums}
-                filteredAlbums={filteredAlbums}
-                setFilteredAlbums={setFilteredAlbums}
-                setMainPL={setMainPL}
-              />
-            </AppContextProvider>
-          </Suspense>
-          {/*  <AppContextProvider>
+      <SlidesWrapper imagesPlaylist={mainPL} />
+      <section className={`${styles.mainContainer} ${statusStyle[status]}`}>
+        <div className={`${playerControlsStyles.playerContainer}`}>
+          <button
+            aria-label="play"
+            className={`${playerControlsStyles.playerControl}`}
+            onClick={() => {
+              dispatch(play());
+            }}
+          >
+            <PlayIcon className={playerControlsStyles.icon} />
+          </button>
+        </div>
+        <AppContextProvider>
+          <AlbumsList
+            albums={albums}
+            filteredAlbums={filteredAlbums}
+            setFilteredAlbums={setFilteredAlbums}
+            setMainPL={setMainPL}
+          />
+        </AppContextProvider>
+        {/*  <AppContextProvider>
              VER  para implementar luego <NewPlayList /> 
           </AppContextProvider>*/}
 
-          {/* VER este era una prueba de search con debounce, funciona, para aplicar luego al search de albums, etc. <PruebaSearch2 /> */}
-        </section>
-      </Suspense>
+        {/* VER este era una prueba de search con debounce, funciona, para aplicar luego al search de albums, etc. <PruebaSearch2 /> */}
+      </section>
     </main>
   );
 }

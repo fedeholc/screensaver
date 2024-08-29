@@ -51,6 +51,10 @@ export default function AlbumsList({
     stopped: "",
   };
 
+/*   if (albums.length === 0) {
+    return <div className={albumsList.albumsContainer}>Loading...</div>;
+  } */
+
   return (
     <div className={`${albumsList.albumsContainer}${statusStyle[status]}`}>
       <div className={albumsList.albumsSearchContainer}>
@@ -61,8 +65,10 @@ export default function AlbumsList({
           onChange={handleSearch}
         />
       </div>
+
       <div className={albumsList.albumsListContainer}>
         <div className={albumsList.albumsList}>
+          {albums.length === 0 ? <div>Loading...</div> : null}
           {filteredAlbums.map((album) => (
             <div key={album.id} className={albumsList.albumsItem}>
               <div className={albumsList.albumsItemImgContainer}>
