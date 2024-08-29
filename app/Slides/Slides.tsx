@@ -1,15 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import styles from "./slides.module.css";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
-import imageLinks from "./images2.json";
 import {
-  play,
-  stop,
-  pause,
   setAlbumId,
-  selectAlbumId,
   selectStatus,
 } from "@/lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";

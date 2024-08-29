@@ -1,18 +1,17 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import styles from "./page.module.css";
-import React, { useRef, useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
+
+import React, { useEffect, Suspense, useState } from "react";
 import { play, selectStatus } from "../lib/features/player/playerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { AppContext } from "./AppContext";
 import NewPlayList from "./NewPlaylist";
 import { AppContextProvider } from "./AppContext";
-import PruebaSearch2 from "./PruebaSearch2";
-import SlidesWrapper from "./Slides/SlidesWrapper";
-import { PlayIcon } from "./PlayerControls/icons";
-import playerControlsStyles from "./PlayerControls/PlayerControls.module.css";
+import PruebaSearch2 from "@/app/PruebaSearch2";
+import SlidesWrapper from "@/app/Slides/SlidesWrapper";
+import { PlayIcon } from "@/app/PlayerControls/icons";
+import playerControlsStyles from "@/app/PlayerControls/PlayerControls.module.css";
 import type { Album } from "@/app/types/db/Album";
 import type { Image } from "@/app/types/db/Image";
 import { getAlbumImages, getRandomAlbum } from "@/lib/apiService";
@@ -64,34 +63,39 @@ export default function Home() {
 
   return (
     <main className={`${styles.mainPage}`}>
-      <SlidesWrapper imagesPlaylist={mainPL} />
-
-      <section className={`${styles.mainContainer} ${statusStyle[status]}`}>
-        <div className={`${playerControlsStyles.playerContainer}`}>
-          <button
-            aria-label="play"
-            className={`${playerControlsStyles.playerControl}`}
-            onClick={() => {
-              dispatch(play());
-            }}
-          >
-            <PlayIcon className={playerControlsStyles.icon} />
-          </button>
-        </div>
-        <AppContextProvider>
-          <AlbumsList
-            albums={albums}
-            filteredAlbums={filteredAlbums}
-            setFilteredAlbums={setFilteredAlbums}
-            setMainPL={setMainPL}
-          />
-        </AppContextProvider>
-        {/*  <AppContextProvider>
+      <Suspense fallback={<h1>Loading slides...</h1>}>
+        <SlidesWrapper imagesPlaylist={mainPL} />
+      </Suspense>
+      <Suspense fallback={<h1>Loading ...</h1>}>
+        <section className={`${styles.mainContainer} ${statusStyle[status]}`}>
+          <div className={`${playerControlsStyles.playerContainer}`}>
+            <button
+              aria-label="play"
+              className={`${playerControlsStyles.playerControl}`}
+              onClick={() => {
+                dispatch(play());
+              }}
+            >
+              <PlayIcon className={playerControlsStyles.icon} />
+            </button>
+          </div>
+          <Suspense fallback={<h1>Loading slides...</h1>}>
+            <AppContextProvider>
+              <AlbumsList
+                albums={albums}
+                filteredAlbums={filteredAlbums}
+                setFilteredAlbums={setFilteredAlbums}
+                setMainPL={setMainPL}
+              />
+            </AppContextProvider>
+          </Suspense>
+          {/*  <AppContextProvider>
              VER  para implementar luego <NewPlayList /> 
           </AppContextProvider>*/}
 
-        {/* VER este era una prueba de search con debounce, funciona, para aplicar luego al search de albums, etc. <PruebaSearch2 /> */}
-      </section>
+          {/* VER este era una prueba de search con debounce, funciona, para aplicar luego al search de albums, etc. <PruebaSearch2 /> */}
+        </section>
+      </Suspense>
     </main>
   );
 }
