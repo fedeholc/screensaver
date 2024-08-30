@@ -22,8 +22,8 @@ import AlbumsList from "./AlbumsList";
 export default function Home() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectStatus);
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [filteredAlbums, setFilteredAlbums] = useState(albums);
+  /*   const [albums, setAlbums] = useState<Album[]>([]);
+  const [filteredAlbums, setFilteredAlbums] = useState(albums); */
   const [mainPL, setMainPL] = useState<Image[]>([]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function Home() {
     }
   });
 
-  //carga la lista de los albums desde la base de datos
+  /*   //carga la lista de los albums desde la base de datos
   //TODO: habría que implementar acá el debounce y paginación cuando haya mas para cargar.
   useEffect(() => {
     if (albums.length === 0) {
@@ -53,7 +53,7 @@ export default function Home() {
           setFilteredAlbums(data);
         });
     }
-  });
+  }); */
 
   let statusStyle = {
     paused: styles.playing,
@@ -78,9 +78,9 @@ export default function Home() {
         </div>
         <AppContextProvider>
           <AlbumsList
-            albums={albums}
+            /*    albums={albums}
             filteredAlbums={filteredAlbums}
-            setFilteredAlbums={setFilteredAlbums}
+            setFilteredAlbums={setFilteredAlbums} */
             setMainPL={setMainPL}
           />
         </AppContextProvider>
